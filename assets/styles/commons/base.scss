@@ -1,0 +1,17 @@
+html {
+    body {
+        margin:0;
+        background-color: skyblue;
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            min-width: 100vw;
+            padding: 25px;
+
+        }
+
+    }
+}
+
+

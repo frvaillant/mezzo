@@ -1,15 +1,36 @@
 html {
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 15px;
     body {
         margin:0;
-        background-color: skyblue;
+        background-color: #fff;
 
         .container {
             display: flex;
+            flex-direction: column;
             min-height: 100vh;
             min-width: 100vw;
-            padding: 25px;
+            padding: 20px;
+            box-sizing: border-box;
 
+            *, *::before, *::after {
+                box-sizing: inherit;
+            }
+
+            .main-block {
+                flex: 1;
+                width: 100%;
+                border-radius: 12px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
         }
+
 
     }
 }

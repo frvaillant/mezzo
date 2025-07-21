@@ -27,6 +27,12 @@ class PurchaseLine
     #[ORM\JoinColumn(nullable: false)]
     private ?Purchase $purchase = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $consigne = null;
+
+    #[ORM\Column]
+    private ?float $total = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +82,30 @@ class PurchaseLine
     public function setPurchase(?Purchase $purchase): static
     {
         $this->purchase = $purchase;
+
+        return $this;
+    }
+
+    public function getConsigne(): ?float
+    {
+        return $this->consigne;
+    }
+
+    public function setConsigne(?float $consigne): static
+    {
+        $this->consigne = $consigne;
+
+        return $this;
+    }
+
+    public function getTotal(): ?float
+    {
+        return $this->total;
+    }
+
+    public function setTotal(float $total): static
+    {
+        $this->total = $total;
 
         return $this;
     }

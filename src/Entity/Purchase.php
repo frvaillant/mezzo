@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PurchaseRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Purchase
 {
     #[ORM\Id]
@@ -24,6 +25,9 @@ class Purchase
     #[ORM\OneToMany(targetEntity: PurchaseLine::class, mappedBy: 'purchase', orphanRemoval: true)]
     private Collection $line;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $paymentMode = null;
+
     public function __construct()
     {
         $this->line = new ArrayCollection();
@@ -39,9 +43,10 @@ class Purchase
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    #[ORM\PrePersist]
+    public function setCreatedAt(): static
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new \DateTimeImmutable();
 
         return $this;
     }
@@ -72,6 +77,18 @@ class Purchase
                 $line->setPurchase(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPaymentMode(): ?string
+    {
+        return $this->paymentMode;
+    }
+
+    public function setPaymentMode(?string $paymentMode): static
+    {
+        $this->paymentMode = $paymentMode;
 
         return $this;
     }

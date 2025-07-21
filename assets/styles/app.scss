@@ -1,1 +1,11 @@
 @import "commons/base";
+@import "commons/buttons";
+
+//Mode dev
+    .sf-dump {
+        font-size: 14px !important;
+        padding: 1rem !important;
+        max-width: 100vw !important;
+        overflow-x: auto;
+    }
+

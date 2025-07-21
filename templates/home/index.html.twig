@@ -4,7 +4,31 @@
 
 {% block body %}
 
-<div class="main-block">
-    <button id="loader" class="bg-red-400 text-red-950">Click me</button>
-</div>
+    <div class="main-block bg-white gap-5 p-2" >
+
+        <div>
+            <a href="#" class="button bg-teal-600 text-white shadow-md">
+                Caisse du jour
+            </a>
+        </div>
+
+        <div class="flex justify-between items-start w-full">
+
+            <div class="text-lg">
+                {{ today() }}<br>
+                {{ timer() }}
+            </div>
+
+            <div class="font-bold text-xl" data-controller="day-total">
+                {{ day_total }} €
+            </div>
+
+        </div>
+
+        <div id="cashbox" class="w-full" data-selling-list="{{ products | json_encode }}">
+
+        </div>
+
+    </div>
+
 {% endblock %}

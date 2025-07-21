@@ -97,4 +97,18 @@ class Product
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'unitPrice' => $this->getUnitPrice(),
+            'withConsigne' => $this->isWithConsigne(),
+            'saleUnit' => 0.25,
+        ];
+    }
 }

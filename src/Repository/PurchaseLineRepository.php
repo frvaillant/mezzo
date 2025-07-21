@@ -16,20 +16,25 @@ class PurchaseLineRepository extends ServiceEntityRepository
         parent::__construct($registry, PurchaseLine::class);
     }
 
-    //    /**
-    //     * @return PurchaseLine[] Returns an array of PurchaseLine objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+        /**
+         * @return PurchaseLine[] Returns an array of PurchaseLine objects
+         */
+        public function todayTotal(): float
+        {
+            $today = new \DateTime();
+            $start = (clone $today)->setTime(0, 0, 0);
+            $end = (clone $today)->setTime(23, 59, 59);
+
+            return $this->createQueryBuilder('pl')
+                ->join('pl.purchase', 'p')
+                ->where('p.createdAt BETWEEN :start AND :end')
+                ->setParameter('start', $start)
+                ->setParameter('end', $end)
+                ->select('SUM(pl.total + pl.consigne) AS total_sum')
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
+
 
     //    public function findOneBySomeField($value): ?PurchaseLine
     //    {

@@ -46,10 +46,6 @@ Encore
     .enableVersioning(Encore.isProduction())
     .enableStimulusBridge('./assets/controllers.json')
 
-    // configure Babel
-    // .configureBabel((config) => {
-    //     config.plugins.push('@babel/a-babel-plugin');
-    // })
 
     // enables and configure @babel/preset-env polyfills
     .configureBabelPresetEnv((config) => {
@@ -65,20 +61,12 @@ Encore
 
     .enablePostCssLoader()
 
+    .enableVueLoader()
+
     .copyFiles({
         from: './assets/images'
     })
 
-
-    // uncomment if you use React
-    //.enableReactPreset()
-
-    // uncomment to get integrity="..." attributes on your script & link tags
-    // requires WebpackEncoreBundle 1.4 or higher
-    //.enableIntegrityHashes(Encore.isProduction())
-
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

@@ -1,0 +1,33 @@
+.button {
+
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+
+    &.icon-square {
+        width: 40px;
+        height: 40px;
+
+        &.clicked {
+            background: #999;
+        }
+
+        svg {
+            transform: scale(250%);
+        }
+    }
+
+    &.consigne {
+        @apply bg-gray-200;
+        &.active {
+            @apply bg-teal-500;
+            @apply text-white;
+        }
+    }
+
+    &.main-button {
+
+    }
+
+}

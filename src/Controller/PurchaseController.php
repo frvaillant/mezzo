@@ -21,21 +21,21 @@ class PurchaseController extends AbstractController
 {
 
 
-    #[Route('/purchase', name: 'purchase', methods: ['POST'])]
+    #[Route('/purchase/{account}', name: 'purchase', methods: ['POST'])]
     public function purchase(
         Request $request,
-        SerializerInterface $serializer,
         ProductRepository $productRepository,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        string $account = null
     )
     {
         $data = json_decode($request->getContent(), true);
-
         if(!empty($data)) {
 
             try {
                 $purchase = new Purchase();
                 $purchase->setPaymentMode($data['mode']);
+                $purchase->setAccount($account);
                 $manager->persist($purchase);
 
                 foreach ($data['purchase'] as $productId => $cart) {
@@ -77,16 +77,50 @@ class PurchaseController extends AbstractController
 
 
     #[Route('/caisse-du-jour/{date}', name: 'purchase_list')]
-    public function dayList(PurchaseRepository $purchaseRepository, string $date = null)
-    {
+    public function dayList(
+        PurchaseRepository $purchaseRepository,
+        PurchaseLineRepository $purchaseLineRepository,
+        string $date = null
+    ) {
         $date = $date ? new \DateTime($date) : new \DateTime();
 
         $list = $purchaseRepository->dayList($date);
 
+        $accounts = $purchaseLineRepository->getDailyTotalByAccount($date);
+
         return $this->render('purchase/list.html.twig', [
             'date' => $date,
-            'list' => $list
+            'list' => $list,
+            'accounts' => $accounts
         ]);
     }
 
+    #[Route('/checkout/{paymentMode}', name: 'checkout', methods: ['POST'])]
+    public function checkout(
+        string $paymentMode,
+        Request $request,
+        PurchaseRepository $purchaseRepository
+    ): JsonResponse
+    {
+
+        $data = json_decode($request->getContent(), true);
+
+        try {
+            $purchaseRepository->updatePurchases($data['ids'], $data['mode']);
+            return new JsonResponse([], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+
+    #[Route('/account-names', name: 'account_names')]
+    public function getAccountNames(PurchaseRepository $purchaseRepository): JsonResponse
+    {
+        return new JsonResponse($purchaseRepository->accountNames());
+    }
+
 }
+
+

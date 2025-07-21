@@ -36,6 +36,25 @@ class PurchaseLineRepository extends ServiceEntityRepository
         }
 
 
+    public function getDailyTotalByAccount(\DateTimeInterface $date): array
+    {
+        $start = (clone $date)->setTime(0, 0, 0);
+        $end = (clone $date)->setTime(23, 59, 59);
+
+        return $this->createQueryBuilder('pl')
+            ->select('p.account AS name')
+            ->addSelect('SUM(pl.total + pl.consigne) AS total')
+            ->join('pl.purchase', 'p')
+            ->where('p.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->andWhere('p.account IS NOT NULL')
+            ->groupBy('name')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     //    public function findOneBySomeField($value): ?PurchaseLine
     //    {
     //        return $this->createQueryBuilder('p')

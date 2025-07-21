@@ -28,11 +28,11 @@ import {ref, watch} from "vue";
     const handleClickAdd = (element => {
         element.classList.add('clicked')
         void element.offsetWidth;
-        element.style.transition = '0.3s ease'
-        const delay = 300
+        element.style.transition = '0.25s ease'
+        const delay = 250
         setTimeout(() => {
             element.classList.remove('clicked')
-        }, delay)
+        }, 100)
 
         setTimeout(() => {
             element.removeAttribute('style')
@@ -79,7 +79,7 @@ import {ref, watch} from "vue";
 </script>
 
 <template>
-    <div class="flex flex-col items-start justify-between p-3 border-b w-full">
+    <div class="flex flex-col items-start justify-between p-3 bg-gray-100 rounded-lg w-full">
 
         <div class="text-lg font-medium flex justify-between items-center w-full">
 
@@ -97,7 +97,7 @@ import {ref, watch} from "vue";
 
                 <div
                     class="button icon-square font-bold flex justify-center items-center"
-                    :class="quantity === 0 ? 'bg-gray-200 text-gray-500' : 'bg-teal-500 text-white'"
+                    :class="quantity === 0 ? 'text-gray-200 bg-white' : 'bg-teal-500 text-white text-xl'"
                 >
                     {{ quantity }}
                 </div>

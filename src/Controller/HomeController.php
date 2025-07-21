@@ -14,7 +14,8 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(
         ProductRepository $productRepository,
-        PurchaseLineRepository $purchaseLineRepository
+        PurchaseLineRepository $purchaseLineRepository,
+        PurchaseRepository $purchaseRepository
     ): Response
     {
 
@@ -27,6 +28,7 @@ final class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'products' => $sellingList,
+            'account_names' => $purchaseRepository->accountNames(),
             'day_total' => $purchaseLineRepository->todayTotal(),
         ]);
     }

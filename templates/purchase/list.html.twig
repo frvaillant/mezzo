@@ -40,7 +40,11 @@
                 {% set mainPaymentsTotal = [] %}
                 {% for purchase in list %}
 
-                    <tr>
+                    <tr
+                        class="{{ purchase.account ? 'bg-cyan-400' : '' }} purchase-line"
+                        data-purchase-id="{{ purchase.id }}"
+                        data-account="{{ purchase.account }}"
+                    >
                         <td>
                             {{ purchase.createdAt | date('H:i') }}
                         </td>
@@ -51,7 +55,11 @@
                             {{ purchase.consigne }}
                         </td>
                         <td class="text-center">
-                            {{ purchase.paymentMode | slice(0,2) | capitalize }}.
+                            {% if purchase.paymentMode %}
+                                {{ purchase.paymentMode | slice(0,2) | capitalize }}.
+                            {% elseif purchase.account %}
+                                {{ purchase.account | slice(0,3) | capitalize }}.
+                            {% endif %}
                         </td>
                         <td class="text-end">
                             {% set total = purchase.total + purchase.consigne %}
@@ -83,6 +91,34 @@
                         </tr>
                     {% endfor %}
             </tbody>
+        </table>
+
+        <div class="text-xl font-bold mt-5">
+            En compte
+        </div>
+        <table class="mt-3">
+            {% for account in accounts %}
+                <tr data-controller="account" data-account="{{ account.name }}">
+                    <td>
+                        {{ account.name }}
+                    </td>
+                    <td class="text-end">
+                        {{ account.total }} €
+                    </td>
+                    <td class="text-end">
+                        <button class="button bg-teal-500 text-white" data-action="click->account#checkout" data-payment-mode="espèces">
+                            Esp.
+                        </button>
+                        <button class="button bg-teal-500 text-white" data-action="click->account#checkout" data-payment-mode="chèque">
+                            Chq.
+                        </button>
+                        <button class="button bg-teal-500 text-white" data-action="click->account#checkout" data-payment-mode="CB">
+                            CB
+                        </button>
+                    </td>
+                </tr>
+
+            {% endfor %}
         </table>
     </div>
 

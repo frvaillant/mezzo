@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "@hotwired/stimulus": "^3.2.2",
+        "@phosphor-icons/web": "^2.1.2",
         "@symfony/stimulus-bridge": "^4.0.1",
         "@vue/compiler-sfc": "^3.5.13",
         "notyf": "^3.10.0",

@@ -6,6 +6,7 @@ import Purchase from "./Purchase.vue";
 
 const quantity = ref( 1);
 const sellingList = ref( []);
+const accountNames = ref( []);
 
 
 onMounted(() => {
@@ -19,6 +20,7 @@ onMounted(() => {
             }
 
            sellingList.value = JSON.parse(cashbox.dataset.sellingList)
+           accountNames.value = JSON.parse(cashbox.dataset.accountNames)
 
         } catch (error) {
             console.error("Erreur lors de l'initialisation :", error);
@@ -41,7 +43,7 @@ const increase = () => {
 
 <template>
 
-    <Purchase :selling-list="sellingList" />
+    <Purchase :selling-list="sellingList" :account-names="accountNames" />
 
 </template>
 

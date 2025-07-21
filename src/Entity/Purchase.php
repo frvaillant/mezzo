@@ -28,6 +28,9 @@ class Purchase
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $paymentMode = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $account = null;
+
     public function __construct()
     {
         $this->line = new ArrayCollection();
@@ -110,5 +113,17 @@ class Purchase
             $total += $line->getConsigne();
         }
         return $total;
+    }
+
+    public function getAccount(): ?string
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?string $account): static
+    {
+        $this->account = $account;
+
+        return $this;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Purchase;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -32,4 +33,32 @@ class PurchaseRepository extends ServiceEntityRepository
                 ->getResult()
             ;
         }
+
+
+    public function accountNames(?\DateTime $date = null): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('DISTINCT(p.account) as name')
+            ->where('p.account IS NOT NULL')
+            ->getQuery()
+            ->getResult(Query::HYDRATE_SCALAR_COLUMN)
+            ;
+
+    }
+
+    public function updatePurchases(array $ids, string $mode): void
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        $qb->update()
+            ->set('p.account', ':null')
+            ->set('p.paymentMode', ':mode')
+            ->where($qb->expr()->in('p.id', ':ids'))
+            ->setParameter('null', null)
+            ->setParameter('mode', $mode)
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->execute();
+    }
+
 }

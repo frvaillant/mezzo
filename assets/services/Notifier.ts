@@ -11,12 +11,14 @@ class Notifier {
                 icon: false,
                 duration: 3000,
                 dismissible: true,
+                className: 'font-bold text-xl',
             },
             {
                 type: 'warning',
                 background: 'orange',
                 duration: 3000,
                 dismissible: true,
+                className: 'font-bold text-xl',
                 icon: {
                     className: 'material-icons',
                     tagName: 'i',
@@ -28,12 +30,14 @@ class Notifier {
                 background: 'indianred',
                 duration: 3000,
                 dismissible: true,
+                className: 'font-bold text-xl',
             },
             {
                 type: 'success',
                 background: '#00cc99',
                 duration: 3000,
                 dismissible: true,
+                className: 'font-bold text-xl',
             },
         ],
     });

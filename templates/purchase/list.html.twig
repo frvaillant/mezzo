@@ -74,13 +74,32 @@
                 {% endfor %}
                     <tr class="bg-gray-200">
                         <td colspan="4" class="font-bold">
-                            Total
+                            Total ventes
                         </td>
                         <td class="text-end text-xl font-bold">
                             {{ mainTotal }} €
                         </td>
                     </tr>
+                    <tr class="bg-gray-200">
+                        <td colspan="4" class="font-bold">
+                            Consignes remboursées
+                        </td>
+                        <td class="text-end text-xl font-bold">
+                            {{ returns }} €
+                        </td>
+                    </tr>
+                    <tr class="bg-gray-700 text-white">
+                        <td colspan="4" class="font-bold">
+                            Total
+                        </td>
+                        <td class="text-end text-xl font-bold">
+                            {{ mainTotal - returns }} €
+                        </td>
+                    </tr>
                     {% for mode, total in mainPaymentsTotal %}
+                        {% if mode == '' %}
+                            {% set mode = 'Comptes' %}
+                        {% endif %}
                         <tr>
                             <td colspan="4" class="">
                                 Total {{ mode }}

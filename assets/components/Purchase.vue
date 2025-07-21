@@ -14,13 +14,12 @@
         }
     })
 
-    const total = ref( 0);
-    const buyingList = ref({})
+    const total       = ref( 0);
+    const buyingList  = ref({})
     const productRefs = ref([])
     const canPurchase = ref(true)
-    const accountRef = ref(null)
+    const accountRef  = ref(null)
     const localAccountNames = ref([...props.accountNames])
-
 
     onMounted(() => {
         nextTick(() => {
@@ -38,7 +37,6 @@
     }
 
     const resetAll = async () => {
-        // On attend que le DOM soit mis à jour
         await nextTick()
         productRefs.value.forEach(child => {
             child?.reset?.()

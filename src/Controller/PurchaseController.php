@@ -2,25 +2,35 @@
 
 namespace App\Controller;
 
-use App\Dto\PurchaseDto;
 use App\Dto\PurchaseProductDto;
 use App\Entity\Purchase;
 use App\Entity\PurchaseLine;
+use App\Entity\ReturnableGlassReturn;
 use App\Repository\ProductRepository;
 use App\Repository\PurchaseLineRepository;
 use App\Repository\PurchaseRepository;
+use App\Repository\ReturnableGlassReturnRepository;
+use App\Service\DateAmountService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class PurchaseController extends AbstractController
 {
 
 
+    /**
+     * @param Request $request
+     * @param ProductRepository $productRepository
+     * @param EntityManagerInterface $manager
+     * @param string|null $account
+     * @return JsonResponse
+     *
+     * Enregistre une vente, réelle ou en compte/ardoise
+     */
     #[Route('/purchase/{account}', name: 'purchase', methods: ['POST'])]
     public function purchase(
         Request $request,
@@ -69,17 +79,38 @@ class PurchaseController extends AbstractController
     }
 
 
-    #[Route('/daytotal', name: 'day_total', methods: ['POST'])]
-    public function getDayTotal(PurchaseLineRepository $purchaseLineRepository): JsonResponse
+    /**
+     * @param PurchaseLineRepository $purchaseLineRepository
+     * @return JsonResponse
+     *
+     * Retourne le total des ventes du jour
+     */
+    #[Route('/daytotal/{date}', name: 'day_total', methods: ['POST'])]
+    public function getDayTotal(
+        DateAmountService $dateAmountService,
+        ?string $date = null
+    ): JsonResponse
     {
-        return new JsonResponse(['total' => $purchaseLineRepository->todayTotal()], Response::HTTP_OK);
+        $date = $date ? new \DateTime($date) : new \DateTime();
+
+        return new JsonResponse(['total' => $dateAmountService->getRealDateAmount($date)], Response::HTTP_OK);
     }
 
 
+    /**
+     * @param PurchaseRepository $purchaseRepository
+     * @param PurchaseLineRepository $purchaseLineRepository
+     * @param string|null $date
+     * @return Response
+     * @throws \Exception
+     *
+     * Affiche la liste des paiements du jour
+     */
     #[Route('/caisse-du-jour/{date}', name: 'purchase_list')]
     public function dayList(
         PurchaseRepository $purchaseRepository,
         PurchaseLineRepository $purchaseLineRepository,
+        DateAmountService $dateAmountService,
         string $date = null
     ) {
         $date = $date ? new \DateTime($date) : new \DateTime();
@@ -88,13 +119,25 @@ class PurchaseController extends AbstractController
 
         $accounts = $purchaseLineRepository->getDailyTotalByAccount($date);
 
+        $returns  = $dateAmountService->getReturnsCount($date);
+
         return $this->render('purchase/list.html.twig', [
             'date' => $date,
             'list' => $list,
-            'accounts' => $accounts
+            'accounts' => $accounts,
+            'returns' => $returns
         ]);
     }
 
+
+    /**
+     * @param string $paymentMode
+     * @param Request $request
+     * @param PurchaseRepository $purchaseRepository
+     * @return JsonResponse
+     *
+     * Enregistre le paiement d'une ardoise
+     */
     #[Route('/checkout/{paymentMode}', name: 'checkout', methods: ['POST'])]
     public function checkout(
         string $paymentMode,
@@ -115,10 +158,72 @@ class PurchaseController extends AbstractController
     }
 
 
+    /**
+     * @param PurchaseRepository $purchaseRepository
+     * @return JsonResponse
+     *
+     * Renvoie les noms des personnes ayant une ardoise
+     */
     #[Route('/account-names', name: 'account_names')]
     public function getAccountNames(PurchaseRepository $purchaseRepository): JsonResponse
     {
         return new JsonResponse($purchaseRepository->accountNames());
+    }
+
+
+    /**
+     * @param EntityManagerInterface $manager
+     * @param ReturnableGlassReturnRepository $returnRepository
+     * @param string|null $date
+     * @return JsonResponse
+     *
+     * Enregistre un retour de consigne
+     */
+    #[Route('/return-glass/{date}', name: 'return_glass')]
+    public function returnGlass(
+        EntityManagerInterface $manager,
+        ReturnableGlassReturnRepository $returnRepository,
+        ?string $date = null
+    ): JsonResponse
+    {
+
+        $date = $date ?? date('Y-m-d');
+
+        $returnable = new ReturnableGlassReturn();
+        $manager->persist($returnable);
+        $manager->flush();
+
+        $returns =  $returnRepository->findBy([
+            'returnedAt' => $date
+        ]);
+
+        return new JsonResponse(['count' => count($returns)], Response::HTTP_OK);
+
+    }
+
+
+    /**
+     * @param ReturnableGlassReturnRepository $returnRepository
+     * @param string|null $date
+     * @return JsonResponse
+     *
+     * Compte les consignes retournées par jour
+     */
+    #[Route('/returnable-returns/{date}', name: 'returnable_returns')]
+    public function returnableReturns(
+        ReturnableGlassReturnRepository $returnRepository,
+        ?string $date = null
+    ): JsonResponse
+    {
+
+        $date = new \DateTime($date) ?? new \DateTime();
+
+        $returns =  $returnRepository->findBy([
+            'returnedAt' => $date
+        ]);
+
+        return new JsonResponse(['count' => count($returns)], Response::HTTP_OK);
+
     }
 
 }

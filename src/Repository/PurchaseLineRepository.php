@@ -19,9 +19,9 @@ class PurchaseLineRepository extends ServiceEntityRepository
         /**
          * @return PurchaseLine[] Returns an array of PurchaseLine objects
          */
-        public function todayTotal(): float
+        public function todayTotal(?\DateTime $date = null): float
         {
-            $today = new \DateTime();
+            $today = $date ?? new \DateTime();
             $start = (clone $today)->setTime(0, 0, 0);
             $end = (clone $today)->setTime(23, 59, 59);
 

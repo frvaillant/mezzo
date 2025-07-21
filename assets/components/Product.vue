@@ -11,6 +11,7 @@ import {ref, watch} from "vue";
     const total = ref( 0);
     const quantity = ref(props.product.quantity ?? 0)
     const hasConsigne = ref(false)
+    const consigneButton = ref(null)
 
     const emit = defineEmits(['update-total'])
 
@@ -55,6 +56,7 @@ import {ref, watch} from "vue";
     const reset = () => {
         quantity.value = 0
         hasConsigne.value = false
+        consigneButton?.value?.classList.remove('active')
         calculate()
     }
 
@@ -86,6 +88,7 @@ import {ref, watch} from "vue";
             </div>
 
             <div class="flex items-center gap-4">
+
                 <button class="button flex justify-center items-center icon-square text-black" @click="increase">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -112,6 +115,7 @@ import {ref, watch} from "vue";
 
             <div>
                 <button
+                    ref="consigneButton"
                     @click="toggleConsigne"
                     v-if="props.product.withConsigne"
                     class="button consigne flex items-center"

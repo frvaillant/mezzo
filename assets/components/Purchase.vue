@@ -10,8 +10,6 @@
         }
     })
 
-    const notifier = new Notifier()
-
     const total = ref( 0);
     const buyingList = ref({})
     const productRefs = ref([])
@@ -51,11 +49,11 @@
 
         if(response.status === 200) {
             await resetAll()
-            notifier.success('Achat enregistré')
+            Notifier.success('Achat enregistré')
             document.dispatchEvent(purchaseEvent)
             return
         }
-        notifier.error('Une erreur s\'est produite')
+        Notifier.error('Une erreur s\'est produite')
 
     }
 

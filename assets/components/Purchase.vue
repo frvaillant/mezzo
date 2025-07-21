@@ -1,6 +1,7 @@
 <script setup >
     import Product from "./Product.vue";
     import {computed, nextTick, ref} from "vue";
+    import Notifier from "../services/Notifier";
 
     const props = defineProps({
         sellingList: {
@@ -8,6 +9,8 @@
             required: true
         }
     })
+
+    const notifier = new Notifier()
 
     const total = ref( 0);
     const buyingList = ref({})
@@ -47,13 +50,12 @@
         })
 
         if(response.status === 200) {
-            resetAll()
-            alert('achat enregistré')
+            await resetAll()
+            notifier.success('Achat enregistré')
             document.dispatchEvent(purchaseEvent)
             return
         }
-
-        alert('Une erreur s\'est produite')
+        notifier.error('Une erreur s\'est produite')
 
     }
 
@@ -98,19 +100,19 @@
             <div class="px-2 flex justify-between">
                 <button
                     @click="purchase('espèces')"
-                    class="button text-lg bg-teal-600 text-white shadow-md mt-3"
+                    class="button text-lg bg-teal-500 text-white shadow-md mt-3"
                 >
                     Espèces
                 </button>
                 <button
                     @click="purchase('chèque')"
-                    class="button text-lg bg-teal-600 text-white shadow-md mt-3"
+                    class="button text-lg bg-teal-500 text-white shadow-md mt-3"
                 >
                     Chèque
                 </button>
                 <button
                     @click="purchase('CB')"
-                    class="button text-lg bg-teal-600 text-white shadow-md mt-3"
+                    class="button text-lg bg-teal-500 text-white shadow-md mt-3"
                 >
                     CB
                 </button>

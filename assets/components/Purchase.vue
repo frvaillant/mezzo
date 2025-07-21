@@ -13,6 +13,7 @@
     const total = ref( 0);
     const buyingList = ref({})
     const productRefs = ref([])
+    const canPurchase = ref(true)
 
     const handleTotalUpdate = ({ id, total, quantity, hasConsigne, totalProduct }) => {
         buyingList.value[id] = {
@@ -37,23 +38,33 @@
 
     const purchase = async (mode) => {
 
-        const purchaseEvent = new CustomEvent('Purchase')
-        const data = {
-            purchase: buyingList.value,
-            mode: mode
-        }
-        const response = await fetch('/purchase', {
-            method: 'POST',
-            body: JSON.stringify(data)
-        })
+        if(canPurchase.value && globalTotal.value > 0) {
 
-        if(response.status === 200) {
-            await resetAll()
-            Notifier.success('Achat enregistré')
-            document.dispatchEvent(purchaseEvent)
-            return
+            canPurchase.value = false
+
+            const purchaseEvent = new CustomEvent('Purchase')
+
+            const data = {
+                purchase: buyingList.value,
+                mode: mode
+            }
+
+            const response = await fetch('/purchase', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+
+            if (response.status === 200) {
+                await resetAll()
+                Notifier.success('Achat enregistré')
+                document.dispatchEvent(purchaseEvent)
+                canPurchase.value = true
+                return
+            }
+            canPurchase.value = true
+            Notifier.error('Une erreur s\'est produite')
+
         }
-        Notifier.error('Une erreur s\'est produite')
 
     }
 
@@ -118,6 +129,12 @@
 
         </div>
 
+    </div>
+
+    <div class="mt-5">
+        <button class="button bg-gray-200">
+            Restitution consigne
+        </button>
     </div>
 
 </template>

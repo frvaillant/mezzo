@@ -6,18 +6,11 @@
 
     <div class="main-block bg-white gap-5 p-2" >
 
-        <div>
-            <a href="{{ path('purchase_list') }}" class="button bg-teal-600 text-white shadow-md">
+        <div class="w-full flex justify-between">
+
+            <a href="{{ path('purchase_list') }}" class="text-lg button bg-teal-600 text-white shadow-md">
                 Caisse du jour
             </a>
-        </div>
-
-        <div class="flex justify-between items-start w-full">
-
-            <div class="text-lg">
-                {{ today() }}<br>
-                {{ timer() }}
-            </div>
 
             <div class="font-bold text-xl" data-controller="day-total">
                 {{ day_total }} €

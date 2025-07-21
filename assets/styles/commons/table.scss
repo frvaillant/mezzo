@@ -1,0 +1,28 @@
+table {
+    width: 100%;
+    tr {
+        th, td {
+            padding: 5px 2px;
+        }
+        th {
+
+        }
+        td {
+
+        }
+    }
+    thead {
+        tr {
+            th {
+                border-bottom: 1px solid black;
+            }
+        }
+    }
+    tbody {
+        tr {
+            td {
+                border-bottom: 1px solid #ccc;
+            }
+        }
+    }
+}

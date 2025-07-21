@@ -8,6 +8,7 @@ use App\Entity\Purchase;
 use App\Entity\PurchaseLine;
 use App\Repository\ProductRepository;
 use App\Repository\PurchaseLineRepository;
+use App\Repository\PurchaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -72,6 +73,20 @@ class PurchaseController extends AbstractController
     public function getDayTotal(PurchaseLineRepository $purchaseLineRepository): JsonResponse
     {
         return new JsonResponse(['total' => $purchaseLineRepository->todayTotal()], Response::HTTP_OK);
+    }
+
+
+    #[Route('/caisse-du-jour/{date}', name: 'purchase_list')]
+    public function dayList(PurchaseRepository $purchaseRepository, string $date = null)
+    {
+        $date = $date ? new \DateTime($date) : new \DateTime();
+
+        $list = $purchaseRepository->dayList($date);
+
+        return $this->render('purchase/list.html.twig', [
+            'date' => $date,
+            'list' => $list
+        ]);
     }
 
 }

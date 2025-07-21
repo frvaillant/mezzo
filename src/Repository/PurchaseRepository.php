@@ -18,13 +18,18 @@ class PurchaseRepository extends ServiceEntityRepository
 
 
 
-    //    public function findOneBySomeField($value): ?Purchase
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        public function dayList(?\DateTime $date = null): array
+        {
+            $today = $date ?? new \DateTime();
+            $start = (clone $today)->setTime(0, 0, 0);
+            $end = (clone $today)->setTime(23, 59, 59);
+
+            return $this->createQueryBuilder('p')
+                ->where('p.createdAt BETWEEN :start AND :end')
+                ->setParameter('start', $start)
+                ->setParameter('end', $end)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
 }

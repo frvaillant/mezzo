@@ -92,4 +92,23 @@ class Purchase
 
         return $this;
     }
+
+
+    public function getTotal(): float
+    {
+        $total = 0;
+        foreach ($this->getLine() as $line) {
+            $total += $line->getTotal();
+        }
+        return $total;
+    }
+
+    public function getConsigne(): float
+    {
+        $total = 0;
+        foreach ($this->getLine() as $line) {
+            $total += $line->getConsigne();
+        }
+        return $total;
+    }
 }

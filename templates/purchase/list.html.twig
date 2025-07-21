@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Caisse{% endblock %}
+
+{% block body %}
+
+<div class="main-block bg-white gap-5 p-2" >
+
+    <div>
+        <a href="{{ path('app_home') }}" class="button bg-teal-600 text-white shadow-md">
+            Caisse du {{ date | date('d/m/Y') }}
+        </a>
+    </div>
+
+    <div class="w-full">
+        <table>
+            <thead>
+                <tr>
+                    <th class="text-start">
+                        Heure
+                    </th>
+                    <th class="text-center">
+                        Montant
+                    </th>
+                    <th class="text-center">
+                        Consignes
+                    </th>
+                    <th class="text-center">
+                        Mode
+                    </th>
+                    <th class="text-end">
+                        Total
+                    </th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                {% set mainTotal = 0 %}
+                {% set mainPaymentsTotal = [] %}
+                {% for purchase in list %}
+
+                    <tr>
+                        <td>
+                            {{ purchase.createdAt | date('H:i') }}
+                        </td>
+                        <td class="text-center">
+                            {{ purchase.total }}
+                        </td>
+                        <td class="text-center">
+                            {{ purchase.consigne }}
+                        </td>
+                        <td class="text-center">
+                            {{ purchase.paymentMode | slice(0,2) | capitalize }}.
+                        </td>
+                        <td class="text-end">
+                            {% set total = purchase.total + purchase.consigne %}
+                            {% set mainTotal = mainTotal + total %}
+
+                            {% set previous = mainPaymentsTotal[purchase.paymentMode]|default(0) %}
+                            {% set mainPaymentsTotal = mainPaymentsTotal|merge({ (purchase.paymentMode): previous + total }) %}
+                            {{ total }} €
+                        </td>
+                    </tr>
+
+                {% endfor %}
+                    <tr class="bg-gray-200">
+                        <td colspan="4" class="font-bold">
+                            Total
+                        </td>
+                        <td class="text-end text-xl font-bold">
+                            {{ mainTotal }} €
+                        </td>
+                    </tr>
+                    {% for mode, total in mainPaymentsTotal %}
+                        <tr>
+                            <td colspan="4" class="">
+                                Total {{ mode }}
+                            </td>
+                            <td class="text-end text-xl ">
+                                {{ total }} €
+                            </td>
+                        </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

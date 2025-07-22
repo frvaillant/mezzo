@@ -13,7 +13,6 @@ export default class extends Controller {
         this.canRemove = false
     }
 
-
     show = (e) => {
         e.preventDefault()
         this.listTarget.classList.add('visible')
@@ -36,7 +35,6 @@ export default class extends Controller {
         this.canRemove = false
         this.toggleUndoVisibility()
     }
-
 
     launchRemove = async (purchaseId, btn) => {
         if(this.canRemove) {
@@ -85,7 +83,6 @@ export default class extends Controller {
 
             }
         }
-
     }
 
     refresh = async () => {
@@ -103,6 +100,5 @@ export default class extends Controller {
 
         this.container.innerHTML = html
     }
-
 
 }

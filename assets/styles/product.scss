@@ -33,6 +33,17 @@
                 border-bottom : 10px solid transparent;
                 content: ' ';
             }
+            &:after {
+                position: absolute;
+                content: ' ';
+                top: 50%;
+                left: -6px;
+                width: 4px;
+                height: 4px;
+                background: black;
+                border-radius: 50%;
+                transform: translateY(-50%);
+            }
         }
         .product-picto {
             height: 100%;

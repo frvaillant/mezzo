@@ -179,7 +179,7 @@ class PurchaseController extends AbstractController
      *
      * Enregistre un retour de consigne
      */
-    #[Route('/return-glass/{date}', name: 'return_glass')]
+    #[Route('/return-glass/{date}', name: 'return_glass', methods: ['POST'])]
     public function returnGlass(
         EntityManagerInterface $manager,
         ReturnableGlassReturnRepository $returnRepository,
@@ -187,7 +187,7 @@ class PurchaseController extends AbstractController
     ): JsonResponse
     {
 
-        $date = $date ?? date('Y-m-d');
+        $date = $date ? new \DateTime($date) : new \DateTime();
 
         $returnable = new ReturnableGlassReturn();
         $manager->persist($returnable);

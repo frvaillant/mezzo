@@ -6,21 +6,6 @@
 
     <div class="main-block bg-white gap-5 p-2" >
 
-        <div class="w-full flex justify-between">
-
-            <a href="{{ path('purchase_list') }}" class="text-lg button bg-teal-600 text-white shadow-md">
-                Caisse du jour
-            </a>
-
-            <div class="font-bold text-xl" data-controller="day-total">
-                {{ day_total }} €
-            </div>
-
-        </div>
-
-        <div id="cashbox" class="w-full" data-account-names="{{ account_names | json_encode }}" data-selling-list="{{ products | json_encode }}">
-
-        </div>
 
     </div>
 

@@ -1,0 +1,27 @@
+
+
+    .product-name {
+        min-height: 50px;
+        .product-picto {
+            height: 100%;
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50px;
+            border-radius: 0.5rem 0 0 0.5rem;
+            background: black;
+            &.return {
+                background: #da2e28;
+                svg {
+                    transform: scale(1.2);
+                    fill: #FFF;
+                }
+            }
+            svg {
+                transform: scale(0.8);
+                fill: #FFF;
+            }
+        }
+    }
+

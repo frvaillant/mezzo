@@ -32,7 +32,7 @@ class PurchaseLineRepository extends ServiceEntityRepository
                 ->setParameter('end', $end)
                 ->select('SUM(pl.total + pl.consigne) AS total_sum')
                 ->getQuery()
-                ->getSingleScalarResult();
+                ->getSingleScalarResult() ?? 0;
         }
 
 

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\ProductRepository;
-use App\Repository\PurchaseLineRepository;
 use App\Repository\PurchaseRepository;
 use App\Service\DateAmountService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +13,18 @@ final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
     public function index(
+
+    ): Response
+    {
+
+
+        return $this->render('home/index.html.twig', [
+
+        ]);
+    }
+
+    #[Route('/cashbox', name: 'app_cashbox')]
+    public function cashbox(
         ProductRepository $productRepository,
         PurchaseRepository $purchaseRepository,
         DateAmountService $amountService,
@@ -27,7 +38,7 @@ final class HomeController extends AbstractController
             $sellingList[] = $product->toArray();
         }
 
-        return $this->render('home/index.html.twig', [
+        return $this->render('cashbox/index.html.twig', [
             'products' => $sellingList,
             'account_names' => $purchaseRepository->accountNames(),
             'day_total' => $amountService->getRealDateAmount(new \DateTime()),

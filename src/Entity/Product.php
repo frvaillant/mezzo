@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -27,6 +28,12 @@ class Product
 
     #[ORM\Column(nullable: true)]
     private ?float $saleUnit = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $picto = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $color = null;
 
     public function getId(): ?int
     {
@@ -109,6 +116,32 @@ class Product
             'unitPrice' => $this->getUnitPrice(),
             'withConsigne' => $this->isWithConsigne(),
             'saleUnit' => 0.25,
+            'picto' => $this->getPicto(),
+            'color' => $this->getColor()
         ];
+    }
+
+    public function getPicto(): ?string
+    {
+        return $this->picto;
+    }
+
+    public function setPicto(?string $picto): static
+    {
+        $this->picto = $picto;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
     }
 }

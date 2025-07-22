@@ -57,6 +57,7 @@ import {ref, watch} from "vue";
         quantity.value = 0
         hasConsigne.value = false
         consigneButton?.value?.classList.remove('active')
+        consigneButton?.value?.classList.remove('bg-' + consigneButton?.value?.dataset.color)
         calculate()
     }
 
@@ -71,7 +72,8 @@ import {ref, watch} from "vue";
     }
 
     const toggleConsigne = (e) => {
-        e.target.classList.toggle('active')
+        e.currentTarget.classList.toggle('active')
+        e.currentTarget.classList.toggle('bg-' + e.currentTarget.dataset.color)
         hasConsigne.value = !hasConsigne.value
         calculate()
     }
@@ -79,31 +81,30 @@ import {ref, watch} from "vue";
 </script>
 
 <template>
-    <div class="flex flex-col items-start justify-between p-3 bg-gray-100 rounded-lg w-full">
+    <div class="flex flex-col items-start justify-between pb-2  rounded-lg w-full product">
 
-        <div class="text-lg font-medium flex justify-between items-center w-full">
+        <div class="text-lg font-medium flex justify-between items-center w-full gap-2">
 
-            <div class="text-xl font-bold flex-1">
-                {{ props.product.name }}
-            </div>
+            <button @click="increase" class="product-name flex items-center text-xl font-bold flex-1 rounded-lg relative" :class="['bg-' + props.product.color]">
+                <span v-html="props.product.picto" class="product-picto "></span>
+                <span class="ms-3">{{ props.product.name }}</span>
+            </button>
 
             <div class="flex items-center gap-4">
 
-                <button class="button flex justify-center items-center icon-square text-black" @click="increase">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                </button>
-
                 <div
                     class="button icon-square font-bold flex justify-center items-center"
-                    :class="quantity === 0 ? 'text-gray-200 bg-white' : 'bg-teal-500 text-white text-xl'"
+                    :class="quantity === 0 ? 'text-gray-300 bg-white' : `bg-${props.product.color} text-white text-xl`"
                 >
                     {{ quantity }}
                 </div>
 
-                <button class="button flex justify-center items-center icon-square text-black text-lg" @click="decrease">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <button
+                    class="button flex justify-center items-center icon-square circle text-white text-lg"
+                    @click="decrease"
+                    :class="['bg-' + props.product.color]"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                     </svg>
                 </button>
@@ -111,15 +112,16 @@ import {ref, watch} from "vue";
 
         </div>
 
-        <div class="flex items-center justify-between w-full mt-2">
+        <div v-if="props.product.withConsigne" class="flex items-center justify-between w-full mt-2">
 
             <div>
                 <button
                     ref="consigneButton"
                     @click="toggleConsigne"
-                    v-if="props.product.withConsigne"
-                    class="button consigne flex items-center"
+                    class="button consigne flex items-center justify-start gap-3"
+                    :data-color="props.product.color"
                 >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" viewBox="0 0 256 256"><path d="M206,26.69A8,8,0,0,0,200,24H56a8,8,0,0,0-7.94,9l23.15,193A16,16,0,0,0,87.1,240h81.8a16,16,0,0,0,15.89-14.09L207.94,33A8,8,0,0,0,206,26.69ZM191,40,188.1,64H67.9L65,40ZM168.9,224H87.1L69.82,80H186.18Z"></path></svg>
                     Consigne
                 </button>
             </div>

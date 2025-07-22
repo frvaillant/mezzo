@@ -36,6 +36,23 @@ class PurchaseLineRepository extends ServiceEntityRepository
         }
 
 
+    public function getReturnables(?\DateTime $date = null): float
+    {
+        $today = $date ?? new \DateTime();
+        $start = (clone $today)->setTime(0, 0, 0);
+        $end = (clone $today)->setTime(23, 59, 59);
+
+        return $this->createQueryBuilder('pl')
+            ->join('pl.purchase', 'p')
+            ->where('p.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->select('SUM(pl.consigne) AS total')
+            ->getQuery()
+            ->getSingleScalarResult() ?? 0;
+    }
+
+
     /**
      * @return PurchaseLine[] Returns an array of PurchaseLine objects
      */

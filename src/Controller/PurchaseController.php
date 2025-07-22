@@ -219,25 +219,38 @@ class PurchaseController extends AbstractController
      *
      * Enregistre un retour de consigne
      */
-    #[Route('/return-glass/{date}', name: 'return_glass', methods: ['POST'])]
+    #[Route('/return-glass/{date}', name: 'return_glass', methods: ['POST', 'GET'])]
     public function returnGlass(
         EntityManagerInterface $manager,
         ReturnableGlassReturnRepository $returnRepository,
+        PurchaseLineRepository $purchaseLineRepository,
         ?string $date = null
     ): JsonResponse
     {
 
         $date = $date ? new \DateTime($date) : new \DateTime();
 
+        $returns = $returnRepository->count([
+            'returnedAt' => $date
+        ]);
+
+        $returnables = $purchaseLineRepository->getReturnables($date);
+
+        $returnables = $returnables - $returns;
+
+        if((int)$returnables === 0) {
+            return new JsonResponse([ ], Response::HTTP_NO_CONTENT);
+        }
+
         $returnable = new ReturnableGlassReturn();
         $manager->persist($returnable);
         $manager->flush();
 
-        $returns =  $returnRepository->findBy([
+        $returns = $returnRepository->count([
             'returnedAt' => $date
         ]);
 
-        return new JsonResponse(['count' => count($returns)], Response::HTTP_OK);
+        return new JsonResponse(['count' => $returns], Response::HTTP_OK);
 
     }
 

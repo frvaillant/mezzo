@@ -145,9 +145,17 @@
 
         target.classList.add('opacity-50')
         canReturnReturnable.value = false
+
         const response = await fetch('/return-glass', {
             method: 'POST'
         })
+
+        if(response.status !== 200) {
+            Notifier.error('Plus de consignes enregistrées à rendre')
+            target.classList.remove('opacity-50')
+            canReturnReturnable.value = true
+            return
+        }
 
         if (response.status === 200) {
             const purchaseEvent = new CustomEvent('Purchase')

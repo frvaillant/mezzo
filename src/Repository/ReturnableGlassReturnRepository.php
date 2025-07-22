@@ -16,20 +16,20 @@ class ReturnableGlassReturnRepository extends ServiceEntityRepository
         parent::__construct($registry, ReturnableGlassReturn::class);
     }
 
-    //    /**
-    //     * @return ReturnableGlassReturn[] Returns an array of ReturnableGlassReturn objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+//        /**
+//         * @return ReturnableGlassReturn[] Returns an array of ReturnableGlassReturn objects
+//         */
+//        public function findByDate(?\DateTime $date = null): array
+//        {
+//            return $this->createQueryBuilder('r')
+//                ->andWhere('r.exampleField = :val')
+//                ->setParameter('val', $value)
+//                ->orderBy('r.id', 'ASC')
+//                ->setMaxResults(10)
+//                ->getQuery()
+//                ->getResult()
+//            ;
+//        }
 
     //    public function findOneBySomeField($value): ?ReturnableGlassReturn
     //    {

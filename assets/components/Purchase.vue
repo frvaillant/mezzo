@@ -1,7 +1,7 @@
 <script setup >
-    import Product from "./Product.vue";
-    import {computed, nextTick, onMounted, ref} from "vue";
-    import Notifier from "../services/Notifier";
+    import Product from "./Product.vue"
+    import {computed, nextTick, onMounted, ref} from "vue"
+    import Notifier from "../services/Notifier"
 
     const props = defineProps({
         sellingList: {
@@ -14,7 +14,7 @@
         }
     })
 
-    const total       = ref( 0);
+    const total       = ref( 0)
     const buyingList  = ref({})
     const productRefs = ref([])
     const canPurchase = ref(true)
@@ -58,7 +58,7 @@
 
         if(mode === null && account && accountRef?.value?.value === '') {
             Notifier.error('Saisir un nom ou choisir un mode de paiement')
-            return;
+            return
         }
 
         if(
@@ -66,7 +66,7 @@
             && (mode !== null || account)
         ) {
 
-            const route = account ? `/purchase/${accountRef?.value?.value}` : '/purchase';
+            const route = account ? `/purchase/${accountRef?.value?.value}` : '/purchase'
 
             canPurchase.value = false
 
@@ -141,6 +141,7 @@
 
     const showAccount = (val) => {
         if(globalTotal.value === 0) {
+            Notifier.error('Aucun produit saisi')
             return
         }
         mustShowAccount.value = val
@@ -221,7 +222,7 @@
 
                 <button
                     @click="showAccount(true)"
-                    class="button text-lg bg-black text-white mt-3  flex flex-col justify-center items-center w-[25%]"
+                    class="button text-lg bg-zinc-600 text-white mt-3  flex flex-col justify-center items-center w-[25%]"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff" viewBox="0 0 256 256"><path d="M152,80a8,8,0,0,1,8-8h88a8,8,0,0,1,0,16H160A8,8,0,0,1,152,80Zm96,40H160a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16Zm0,48H184a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm-96.25,22a8,8,0,0,1-5.76,9.74,7.55,7.55,0,0,1-2,.26,8,8,0,0,1-7.75-6c-6.16-23.94-30.34-42-56.25-42s-50.09,18.05-56.25,42a8,8,0,0,1-15.5-4c5.59-21.71,21.84-39.29,42.46-48a48,48,0,1,1,58.58,0C129.91,150.71,146.16,168.29,151.75,190ZM80,136a32,32,0,1,0-32-32A32,32,0,0,0,80,136Z"></path></svg>
                     CPTE

@@ -36,6 +36,28 @@ class PurchaseLineRepository extends ServiceEntityRepository
         }
 
 
+    /**
+     * @return PurchaseLine[] Returns an array of PurchaseLine objects
+     */
+    public function todayTotalByPaymentMode(?\DateTime $date = null): array
+    {
+        $today = $date ?? new \DateTime();
+        $start = (clone $today)->setTime(0, 0, 0);
+        $end = (clone $today)->setTime(23, 59, 59);
+
+        return $this->createQueryBuilder('pl')
+            ->join('pl.purchase', 'p')
+            ->where('p.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->select('COALESCE(SUM(pl.total + pl.consigne), 0) AS total')
+            ->addSelect('COALESCE(p.paymentMode, :defaultMode) AS mode')
+            ->setParameter('defaultMode', 'En compte')
+            ->groupBy('p.paymentMode')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function getDailyTotalByAccount(\DateTimeInterface $date): array
     {
         $start = (clone $date)->setTime(0, 0, 0);

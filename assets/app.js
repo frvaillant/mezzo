@@ -5,6 +5,7 @@ import { createApp } from 'vue';
 
 import Cashbox from "./components/Cashbox.vue";
 
+
 function mountVueApp(selector, component, options = {}) {
     const element = document.querySelector(selector);
     if (!element) return;

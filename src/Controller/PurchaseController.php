@@ -113,20 +113,60 @@ class PurchaseController extends AbstractController
         DateAmountService $dateAmountService,
         string $date = null
     ) {
+
         $date = $date ? new \DateTime($date) : new \DateTime();
 
         $list = $purchaseRepository->dayList($date);
+
+        $total = $purchaseLineRepository->todayTotal($date);
 
         $accounts = $purchaseLineRepository->getDailyTotalByAccount($date);
 
         $returns  = $dateAmountService->getReturnsCount($date);
 
+        $paymentModesTotal = $purchaseLineRepository->todayTotalByPaymentMode($date);
+
         return $this->render('purchase/list.html.twig', [
             'date' => $date,
+            'day_total' => $total,
             'list' => $list,
             'accounts' => $accounts,
-            'returns' => $returns
+            'returns' => $returns,
+            'payment_modes' => $paymentModesTotal
         ]);
+
+    }
+
+
+    #[Route('/resume/{date}', name: 'purchase_list_resume')]
+    public function resume(
+        PurchaseRepository $purchaseRepository,
+        PurchaseLineRepository $purchaseLineRepository,
+        DateAmountService $dateAmountService,
+        string $date = null
+    ) {
+
+        $date = $date ? new \DateTime($date) : new \DateTime();
+
+        $list = $purchaseRepository->dayList($date);
+
+        $total = $purchaseLineRepository->todayTotal($date);
+
+        $accounts = $purchaseLineRepository->getDailyTotalByAccount($date);
+
+        $returns  = $dateAmountService->getReturnsCount($date);
+
+        $paymentModesTotal = $purchaseLineRepository->todayTotalByPaymentMode($date);
+
+        return $this->render('purchase/_resume.html.twig', [
+            'date' => $date,
+            'day_total' => $total,
+            'list' => $list,
+            'accounts' => $accounts,
+            'returns' => $returns,
+            'payment_modes' => $paymentModesTotal
+        ]);
+
     }
 
 
@@ -223,6 +263,20 @@ class PurchaseController extends AbstractController
         ]);
 
         return new JsonResponse(['count' => count($returns)], Response::HTTP_OK);
+
+    }
+
+    #[Route('/purchase/delete/{purchase}', name: 'delete_purchase', methods: ['DELETE'])]
+    public function deletePurchase(
+        Purchase $purchase,
+        EntityManagerInterface $manager
+    ): JsonResponse
+    {
+
+        $manager->remove($purchase);
+        $manager->flush();
+
+        return new JsonResponse(['deleted' => true], Response::HTTP_CREATED);
 
     }
 

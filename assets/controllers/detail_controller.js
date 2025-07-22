@@ -1,11 +1,16 @@
 import { Controller } from '@hotwired/stimulus';
 import Notifier from "../services/Notifier";
+import customConfirm from "../services/Confirm";
 
 export default class extends Controller {
 
-    static targets = [ "list" ]
+    static targets = [ "list", "undo", "undotimer" ]
+
     connect() {
         this.container = document.querySelector('#cashbox-resume')
+        this.interval = null
+        this.waitForDelete = null
+        this.canRemove = false
     }
 
 
@@ -19,24 +24,65 @@ export default class extends Controller {
         this.listTarget.classList.remove('visible')
     }
 
+    toggleUndoVisibility = () => {
+        this.undoTarget.classList.toggle('hidden')
+        this.undoTarget.classList.toggle('flex')
+    }
+
+    undoRemove = (e) => {
+        e.preventDefault()
+        clearInterval(this.interval)
+        clearTimeout(this.waitForDelete)
+        this.canRemove = false
+        this.toggleUndoVisibility()
+    }
+
+
+    launchRemove = async (purchaseId, btn) => {
+        if(this.canRemove) {
+            const route = `/purchase/delete/${purchaseId}`
+            const response = await fetch(route, {
+                method: 'DELETE'
+            })
+
+            if (response.status === 201) {
+                Notifier.success('Achat supprimé')
+                btn.closest('.purchase-line')?.remove()
+                await this.refresh()
+                this.toggleUndoVisibility()
+            }
+        }
+    }
+
+    startInterval = (time) => {
+        this.undotimerTarget.innerText = time
+        this.interval = setInterval(() => {
+            time -= 1
+            this.undotimerTarget.innerText = time
+            if(time === 0) {
+                clearInterval(this.interval)
+            }
+        }, 1000)
+    }
+
     remove = async (e) => {
         e.preventDefault()
+
         const btn = e.currentTarget
         const purchaseId = btn.dataset?.purchaseId
 
         if(purchaseId) {
+            this.canRemove = true
+            const allow = await customConfirm("Voulez-vous vraiment supprimer cet élément ?");
+            if(allow) {
+                this.toggleUndoVisibility()
 
-            if(confirm('Êtes vous sur de vouloir supprimer cette ligne ?')) {
-                const route = `/purchase/delete/${purchaseId}`
-                const response = await fetch(route, {
-                    method: 'DELETE'
-                })
+                this.startInterval(5)
 
-                if (response.status === 201) {
-                    Notifier.success('Achat supprimé')
-                    btn.closest('.purchase-line')?.remove()
-                    await this.refresh()
-                }
+                this.waitForDelete = setTimeout(async () => {
+                    await this.launchRemove(purchaseId, btn)
+                }, 5500)
+
             }
         }
 

@@ -1,6 +1,6 @@
 <script setup >
     import Product from "./Product.vue"
-    import {computed, nextTick, onMounted, ref} from "vue"
+    import {computed, nextTick, onMounted, ref, watch} from "vue"
     import Notifier from "../services/Notifier"
 
     const props = defineProps({
@@ -11,10 +11,15 @@
         accountNames: {
             type: Array,
             required: false
+        },
+        returnables: {
+            type: Number,
+            required: true
         }
     })
 
     const total       = ref( 0)
+    const returnables = ref( props.returnables )
     const buyingList  = ref({})
     const productRefs = ref([])
     const canPurchase = ref(true)
@@ -22,6 +27,23 @@
     const mustShowAccount = ref(false)
     const accountRef  = ref(null)
     const localAccountNames = ref([...props.accountNames])
+
+    watch(() => props.returnables, (newVal) => {
+        returnables.value = newVal
+    })
+
+
+    const updateReturnables = async () => {
+        const response = await fetch('/returnables', {
+            method: 'POST'
+        })
+
+        if(response.status === 200) {
+            const data = await response.json()
+            returnables.value = data.count
+        }
+    }
+
 
     onMounted(() => {
         nextTick(() => {
@@ -97,13 +119,20 @@
             if (response.status === 200) {
 
                 await resetAll()
+
                 Notifier.success('Achat enregistré')
+
                 if (accountRef && accountRef.value) {
                     accountRef.value.value = ''
                 }
+
                 await updateAccountNames()
+                await updateReturnables()
+
                 document.dispatchEvent(purchaseEvent)
+
                 canPurchase.value = true
+
                 if(account) {
                     showAccount(false)
                 }
@@ -161,6 +190,8 @@
             const purchaseEvent = new CustomEvent('Purchase')
             document.dispatchEvent(purchaseEvent)
             Notifier.success('Retour de consigne enregistré')
+            await updateReturnables()
+
         }
         setTimeout(() => {
             target.classList.remove('opacity-50')
@@ -200,7 +231,7 @@
                     <span class="product-picto return">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" viewBox="0 0 256 256"><path d="M206,26.69A8,8,0,0,0,200,24H56a8,8,0,0,0-7.94,9l23.15,193A16,16,0,0,0,87.1,240h81.8a16,16,0,0,0,15.89-14.09L207.94,33A8,8,0,0,0,206,26.69ZM191,40,188.1,64H67.9L65,40ZM168.9,224H87.1L69.82,80H186.18Z"></path></svg>
                     </span>
-                    <span class="ms-3 w-max">Retour consigne</span>
+                    <span class="ms-3 w-max return-returnables" :data-returnables="returnables">Retour consigne</span>
                 </button>
 
 

@@ -11,6 +11,7 @@ use App\Repository\PurchaseLineRepository;
 use App\Repository\PurchaseRepository;
 use App\Repository\ReturnableGlassReturnRepository;
 use App\Service\DateAmountService;
+use App\Service\ReturnableService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -219,26 +220,19 @@ class PurchaseController extends AbstractController
      *
      * Enregistre un retour de consigne
      */
-    #[Route('/return-glass/{date}', name: 'return_glass', methods: ['POST', 'GET'])]
+    #[Route('/return-glass/{date}', name: 'return_glass', methods: ['POST'])]
     public function returnGlass(
         EntityManagerInterface $manager,
         ReturnableGlassReturnRepository $returnRepository,
         PurchaseLineRepository $purchaseLineRepository,
+        ReturnableService $returnableService,
         ?string $date = null
     ): JsonResponse
     {
 
-        $date = $date ? new \DateTime($date) : new \DateTime();
+        $returnables = $returnableService->getReturnables($date);
 
-        $returns = $returnRepository->count([
-            'returnedAt' => $date
-        ]);
-
-        $returnables = $purchaseLineRepository->getReturnables($date);
-
-        $returnables = $returnables - $returns;
-
-        if((int)$returnables === 0) {
+        if($returnables === 0) {
             return new JsonResponse([ ], Response::HTTP_NO_CONTENT);
         }
 
@@ -251,6 +245,25 @@ class PurchaseController extends AbstractController
         ]);
 
         return new JsonResponse(['count' => $returns], Response::HTTP_OK);
+
+    }
+
+
+    #[Route('/returnables/{date}', name: 'returnables_glass', methods: ['POST'])]
+    public function returnables(
+        EntityManagerInterface $manager,
+        ReturnableGlassReturnRepository $returnRepository,
+        PurchaseLineRepository $purchaseLineRepository,
+        ReturnableService $returnableService,
+        ?string $date = null
+    ): JsonResponse
+    {
+
+        $date = new \DateTime($date) ?? new \DateTime();
+
+        $returnables = $returnableService->getReturnables($date);
+
+        return new JsonResponse(['count' => $returnables], Response::HTTP_OK);
 
     }
 

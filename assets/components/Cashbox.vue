@@ -4,9 +4,10 @@ import Product from "./Product.vue";
 import Purchase from "./Purchase.vue";
 
 
-const quantity = ref( 1);
-const sellingList = ref( []);
-const accountNames = ref( []);
+const quantity = ref(1);
+const sellingList = ref([]);
+const accountNames = ref([]);
+const returnables = ref(0);
 
 
 onMounted(() => {
@@ -18,9 +19,9 @@ onMounted(() => {
                 console.error('Élément avec l\'ID "cashbox" introuvable');
                 return;
             }
-
-           sellingList.value = JSON.parse(cashbox.dataset.sellingList)
-           accountNames.value = JSON.parse(cashbox.dataset.accountNames)
+            returnables.value = JSON.parse(cashbox.dataset.returnables)
+            sellingList.value = JSON.parse(cashbox.dataset.sellingList)
+            accountNames.value = JSON.parse(cashbox.dataset.accountNames)
 
         } catch (error) {
             console.error("Erreur lors de l'initialisation :", error);
@@ -43,7 +44,7 @@ const increase = () => {
 
 <template>
 
-    <Purchase :selling-list="sellingList" :account-names="accountNames" />
+    <Purchase :selling-list="sellingList" :account-names="accountNames" :returnables="returnables"/>
 
 </template>
 

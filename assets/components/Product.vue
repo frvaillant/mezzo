@@ -85,7 +85,12 @@ import {ref, watch} from "vue";
 
         <div class="text-lg font-medium flex justify-between items-center w-full gap-2">
 
-            <button @click="increase" class="product-name flex items-center text-xl font-bold flex-1 rounded-lg relative" :class="['bg-' + props.product.color]">
+            <button
+                @click="increase"
+                class="product-name flex items-center text-xl font-bold flex-1 rounded-lg relative"
+                :class="['bg-' + props.product.color]"
+            >
+                <span class="unit-price">{{ props.product.unitPrice }} €</span>
                 <span v-html="props.product.picto" class="product-picto "></span>
                 <span class="ms-3">{{ props.product.name }}</span>
             </button>

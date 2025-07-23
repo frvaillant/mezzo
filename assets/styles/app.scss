@@ -1,18 +1,10 @@
-@import "notyf/notyf.min.css";
+@use "notyf/notyf.min.css";
 
-@import "commons/base";
-@import "commons/returnables";
-@import "commons/confirm";
-@import "commons/buttons";
-@import "commons/table";
-@import "selling_list";
-@import "product";
-
-//Mode dev
-    .sf-dump {
-        font-size: 14px !important;
-        padding: 1rem !important;
-        max-width: 100vw !important;
-        overflow-x: auto;
-    }
+@use "commons/base";
+@use "commons/returnables";
+@use "commons/confirm";
+@use "commons/buttons";
+@use "commons/table";
+@use "selling_list";
+@use "product";
 

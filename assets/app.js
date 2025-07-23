@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mountVueApp('#cashbox', Cashbox);
 });
 
-import './index'
 
 import './styles/tailwind.css';
 import './styles/app.scss';

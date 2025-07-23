@@ -1,0 +1,16 @@
+.selling-list {
+    position: relative;
+    border-radius: 0.5rem 0 0.5rem 0.5rem;
+    .cart-total {
+        position: absolute;
+        right: 0;
+        bottom: 100%;
+
+        .total {
+            border-radius: 0.5rem 0 0 0;
+        }
+        .del-total {
+            border-radius: 0 0.5rem 0 0;
+        }
+    }
+}

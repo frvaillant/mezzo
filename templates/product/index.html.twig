@@ -3,39 +3,48 @@
 {% block title %}Product index{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
+    <div class="main-block bg-white gap-5 p-2 w-full" >
+        <h1 class="text-2xl font-semibold mb-6 text-gray-800 w-full text-start">Liste des produits</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>UnitPrice</th>
-                <th>WithConsigne</th>
-                <th>SaleUnit</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.unitPrice }}</td>
-                <td>{{ product.withConsigne ? 'Yes' : 'No' }}</td>
-                <td>{{ product.saleUnit }}</td>
-                <td>
-                    <a href="{{ path('app_product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="overflow-x-auto w-full">
+            <table class="min-full border border-gray-300 text-sm text-left text-gray-700">
+                <thead class="bg-gray-100 text-xs uppercase font-medium text-gray-600">
+                <tr>
+                    <th class="px-4 py-3 border">Nom</th>
+                    <th class="px-4 py-3 border">Prix unitaire</th>
+                    <th class="px-4 py-3 border">Consigne</th>
+                    <th class="px-4 py-3 border">Unité</th>
+                    <th class="px-4 py-3 border">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2 border">{{ product.name }}</td>
+                        <td class="px-4 py-2 border">{{ product.unitPrice }}</td>
+                        <td class="px-4 py-2 border">{{ product.withConsigne ? 'Oui' : 'Non' }}</td>
+                        <td class="px-4 py-2 border">{{ product.saleUnit }}</td>
+                        <td class="px-4 py-2 border space-x-2">
+                            <a href="{{ path('app_product_show', {'id': product.id}) }}" class="text-blue-600 hover:underline">Voir</a>
+                            <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="text-yellow-600 hover:underline">Éditer</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="px-4 py-4 text-center text-gray-500">Aucun produit trouvé</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-    <a href="{{ path('app_product_new') }}">Create new</a>
+        <div class="mt-6">
+            <a href="{{ path('app_product_new') }}"
+               class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Créer un nouveau produit
+            </a>
+        </div>
+    </div>
 {% endblock %}
+
+

@@ -3,11 +3,16 @@
 {% block title %}Edit Product{% endblock %}
 
 {% block body %}
-    <h1>Edit Product</h1>
+<div class="main-block bg-white gap-5 p-2 w-full" >
 
-    {{ include('product/_form.html.twig', {'button_label': 'Update'}) }}
+    <h1 class="text-2xl font-semibold mb-6 text-gray-800 w-full text-start">
+        Modifier un produit
+    </h1>
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
+    {{ include('product/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a href="{{ path('app_product_index') }}" class="underline">retour</a>
 
     {{ include('product/_delete_form.html.twig') }}
+</div>
 {% endblock %}

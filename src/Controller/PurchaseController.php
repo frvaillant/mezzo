@@ -232,7 +232,7 @@ class PurchaseController extends AbstractController
 
         $returnables = $returnableService->getReturnables($date);
 
-        if($returnables === 0) {
+        if($returnables <= 0) {
             return new JsonResponse([ ], Response::HTTP_NO_CONTENT);
         }
 

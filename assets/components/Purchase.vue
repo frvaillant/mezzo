@@ -137,6 +137,9 @@
                     showAccount(false)
                 }
                 clickedElement.style.opacity = 1
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
                 return
             }
 
@@ -151,6 +154,7 @@
         }
 
         clickedElement.style.opacity = 1
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
     }
 
@@ -209,7 +213,8 @@
 
         if(val) {
             /**
-             * To wait for mustShowAccount is set to true and input becomes visible (v-if="mustShowAccount")
+             * On attend que mustShowAccount soit bien passé à true
+             * pour que l'input soit visible (v-if="mustShowAccount") avant de le "focus"
              */
             setTimeout(() => {
                 accountRef.value?.scrollIntoView()

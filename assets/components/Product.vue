@@ -90,7 +90,6 @@ import {ref, watch} from "vue";
                 class="product-name flex items-center text-md font-bold flex-1 rounded-lg relative"
                 :class="['bg-' + props.product.color]"
             >
-                <span class="unit-price">{{ props.product.unitPrice }} €</span>
                 <span v-html="props.product.picto" class="product-picto "></span>
                 <span class="ms-3 flex-1 text-start h-full flex justify-between pe-2 whitespace-nowrap">
                     {{ props.product.name }}

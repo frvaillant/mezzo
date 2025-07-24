@@ -4,11 +4,23 @@
 
 {% block body %}
 
-    <div class="main-block bg-white gap-5 p-2" >
+    <div
+        class="home-panel gap-10 bg-gray-300 p-2 h-[96vh] w-[92vw] ms-[4vw] mt-[2vh] rounded-xl flex flex-col justify-center items-center"
+        data-controller="leave"
+    >
 
-        <a href="{{ path('app_cashbox') }}" class="button bg-teal-500">
-            Accéder à la caisse
-        </a>
+        <img src="{{ asset('build/mezzo_logo.svg') }}" alt="" width="90%">
+
+        <div>
+            <a
+                href="{{ path('app_cashbox') }}"
+                class="button bg-cyan-500 text-white"
+                data-action="click->leave#go"
+            >
+                Accéder à la caisse
+            </a>
+        </div>
+
     </div>
 
 {% endblock %}

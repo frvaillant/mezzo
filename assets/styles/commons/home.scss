@@ -1,0 +1,6 @@
+.home-panel {
+    transition: 0.5s ease-in-out;
+    &.leave {
+        transform: translateX(-100vw);
+    }
+}

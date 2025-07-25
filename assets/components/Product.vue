@@ -55,7 +55,7 @@ import {ref, watch} from "vue";
 
     const reset = () => {
         quantity.value = 0
-        hasConsigne.value = false
+        // hasConsigne.value = false
         consigneButton?.value?.classList.remove('active')
         consigneButton?.value?.classList.remove('bg-' + consigneButton?.value?.dataset.color)
         calculate()
@@ -127,13 +127,14 @@ import {ref, watch} from "vue";
                     ref="consigneButton"
                     @click="toggleConsigne"
                     class="button consigne flex items-center justify-start gap-3"
+                    :class="[hasConsigne ? 'bg-' + props.product.color : '']"
                     :data-color="props.product.color"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" viewBox="0 0 256 256"><path d="M206,26.69A8,8,0,0,0,200,24H56a8,8,0,0,0-7.94,9l23.15,193A16,16,0,0,0,87.1,240h81.8a16,16,0,0,0,15.89-14.09L207.94,33A8,8,0,0,0,206,26.69ZM191,40,188.1,64H67.9L65,40ZM168.9,224H87.1L69.82,80H186.18Z"></path></svg>
                     Consigne
                 </button>
 
-                <span v-if="quantity > 0">
+                <span v-if="quantity > 0 && !hasConsigne">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M232,56A104.11,104.11,0,0,1,128,160H51.31l34.35,34.34a8,8,0,0,1-11.32,11.32l-48-48a8,8,0,0,1,0-11.32l48-48a8,8,0,0,1,11.32,11.32L51.31,144H128a88.1,88.1,0,0,0,88-88,8,8,0,0,1,16,0Z"></path></svg>
                 </span>
             </div>

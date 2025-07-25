@@ -72,6 +72,7 @@
     )
 
     const purchase = async (mode, account = null, event) => {
+        event.preventDefault()
 
         const clickedElement = event.currentTarget
 
@@ -138,7 +139,7 @@
                 }
                 clickedElement.style.opacity = 1
 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                scrollWindowToTop()
 
                 return
             }
@@ -150,12 +151,21 @@
             }
 
             Notifier.error('Une erreur s\'est produite')
+            scrollWindowToTop()
 
         }
 
         clickedElement.style.opacity = 1
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        scrollWindowToTop()
 
+    }
+
+    const scrollWindowToTop = () => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
     }
 
 
@@ -228,41 +238,36 @@
 <template>
     <div class="">
 
-        <div>
+        <div class="pb-3">
 
-            <div class="py-3 rounded-lg flex items-center justify-between text-white" @click="increase">
+            <div class="py-3 rounded-lg flex items-center justify-between text-white">
 
-                <button v-if="returnables > 0" @click="returnableReturn" class=" h-[50px] bg-black product-name flex items-center text-xl font-bold rounded-lg relative w-max pe-4">
-                    <span class="product-picto return">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" viewBox="0 0 256 256"><path d="M206,26.69A8,8,0,0,0,200,24H56a8,8,0,0,0-7.94,9l23.15,193A16,16,0,0,0,87.1,240h81.8a16,16,0,0,0,15.89-14.09L207.94,33A8,8,0,0,0,206,26.69ZM191,40,188.1,64H67.9L65,40ZM168.9,224H87.1L69.82,80H186.18Z"></path></svg>
-                    </span>
-                    <span class="ms-3 w-max return-returnables" :data-returnables="returnables">
+                <button v-if="returnables > 0" @click="returnableReturn" class=" h-[50px] bg-black product-name flex items-center text-md font-bold rounded-lg relative  pe-4 w-full">
+                            <span class="product-picto return">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" viewBox="0 0 256 256"><path d="M206,26.69A8,8,0,0,0,200,24H56a8,8,0,0,0-7.94,9l23.15,193A16,16,0,0,0,87.1,240h81.8a16,16,0,0,0,15.89-14.09L207.94,33A8,8,0,0,0,206,26.69ZM191,40,188.1,64H67.9L65,40ZM168.9,224H87.1L69.82,80H186.18Z"></path></svg>
+                            </span>
+                    <span class="ms-3 flex-1 return-returnables" :data-returnables="returnables">
                         Retour consigne
                     </span>
                 </button>
 
-                <div v-if="returnables <= 0"> </div>
 
 
             </div>
 
-        </div>
+            <div class="selling-list mt-3 flex flex-col gap-4 p-4 bg-gray-200 relative">
 
-        <div class="pb-3">
+                <div class="flex items-center cart-total w-full gap-5">
 
-            <div class="selling-list mt-6 flex flex-col gap-4 p-4 bg-gray-200 relative">
-
-                <div class="flex items-center cart-total">
-
-                    <span class="text-xl font-bold text-black bg-gray-200 px-4 h-[50px] total flex items-center justify-center">
+                    <span class="text-[25px] flex-1 font-bold rounded-lg text-gray-500 bg-white px-4 h-[50px] total flex items-center justify-center">
                         {{ globalTotal }} €
                     </span>
 
                     <button
                         @click="resetAll"
-                        class="text-lg px-4 h-[50px] del-total flex justify-center items-center icon-square text-black bg-gray-400"
+                        class="text-lg h-[40px] w-[40px] del-total flex justify-center items-center text-white bg-black"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000000" viewBox="0 0 256 256" class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 256 256" class="">
                             <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z">
                             </path>
                         </svg>
@@ -270,13 +275,18 @@
 
                 </div>
 
-                <Product
-                    v-for="product in sellingList"
-                    :key="product.id"
-                    :product="product"
-                    @update-total="handleTotalUpdate"
-                    ref="productRefs"
-                />
+                <div>
+                    <Product
+                        v-for="product in sellingList"
+                        :key="product.id"
+                        :product="product"
+                        @update-total="handleTotalUpdate"
+                        ref="productRefs"
+                    />
+
+                </div>
+
+
             </div>
 
             <div class="flex justify-between mt-4 flex-wrap gap-4">

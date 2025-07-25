@@ -13,6 +13,11 @@
             min-height: 50px;
             border-radius: 0.5rem 0 0 0.5rem;
             background: black;
+            &.svg-white {
+                svg {
+                    fill: #FFF !important;
+                }
+            }
             &.return {
                 background: #da2e28;
                 svg {

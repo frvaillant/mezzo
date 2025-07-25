@@ -2,16 +2,23 @@
 
 namespace App\Controller;
 
+use App\Form\LoginType;
 use App\Repository\ProductRepository;
 use App\Repository\PurchaseRepository;
 use App\Service\DateAmountService;
 use App\Service\ReturnableService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
+
+
+
+
     #[Route('/', name: 'app_home')]
     public function index(
 

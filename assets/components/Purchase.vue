@@ -71,10 +71,23 @@
         Object.values(buyingList.value).reduce((sum, val) => sum + val.total, 0)
     )
 
+    const testIsLoggedIn = async () => {
+        const response = await fetch('/is-logged-in', {
+            method: 'GET',
+        })
+
+        return response.status === 200
+    }
+
     const purchase = async (mode, account = null, event) => {
         event.preventDefault()
-
         const clickedElement = event.currentTarget
+
+        const isLoggedIn = await testIsLoggedIn();
+
+        if(!isLoggedIn) {
+            window.location.href = '/login'
+        }
 
         if(globalTotal.value === 0) {
             Notifier.error('Aucun produit saisi')
@@ -143,6 +156,9 @@
 
                 return
             }
+
+
+
 
             canPurchase.value = true
 

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Caisse{% endblock %}
+
+{% block body %}
+
+    <div
+        class="home-panel gap-10 bg-gray-300 p-2 h-[96vh] w-[92vw] ms-[4vw] mt-[2vh] rounded-xl flex flex-col justify-center items-center"
+        data-controller="leave"
+    >
+
+        <img src="{{ asset('build/mezzo_logo.svg') }}" alt="" width="90%">
+
+        {% if is_valid is defined and not is_valid %}
+            <div class="bg-red-600 py-3 w-full rounded-md text-white font-bold text-center">
+                Code invalide
+            </div>
+        {% endif %}
+
+        <div class="">
+            {% if not has_code %}
+            <p class="p-5 ">
+                Si c'est votre premier accès à l'application, le code saisi ici sera votre code
+            </p>
+            {% endif %}
+
+            {% if locked is defined %}
+                <div class="bg-red-600 px-5 py-3 w-full rounded-md text-white font-bold text-center">
+                    Trop d'essais, revenez dans {{ remaining_time }}
+                </div>
+            {% else %}
+
+            <div class="flex flex-col justify-start items-start">
+                {{ form_start(form) }}
+
+                {% if form_errors(form) %}
+                    <div class="p-5">
+                        <div class="bg-red-600 py-3 w-full rounded-md text-white font-bold text-center">
+                            {{ form_errors(form) }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if available_tries < constant('App\\Security\\SecurityParams::MAX_TRIES') %}
+                    <p class="px-5">
+                        Il vous reste {{ available_tries }} essai{{ available_tries > 1 ? 's' }}
+                    </p>
+                {% endif %}
+
+                {{ form_widget(form) }}
+
+                <div class="p-5 m-0">
+                    <button class="button bg-cyan-500 text-white">
+                        Valider
+                    </button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+{% endblock %}

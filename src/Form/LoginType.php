@@ -14,7 +14,11 @@ class LoginType extends AbstractType
     {
         $builder
             ->add('code', PasswordType::class, [
-                'label' => 'Entrez votre code'
+                'label' => 'Entrez votre code',
+                'attr' => [
+                    'autocomplete' => 'new-password'
+                ],
+                'data' => null
             ])
         ;
     }

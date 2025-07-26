@@ -16,7 +16,8 @@ class LoginType extends AbstractType
             ->add('code', PasswordType::class, [
                 'label' => 'Entrez votre code',
                 'attr' => [
-                    'autocomplete' => 'new-password'
+                    'autocomplete' => 'new-password',
+                    'autofocus' => 'autofocus'
                 ],
                 'data' => null
             ])

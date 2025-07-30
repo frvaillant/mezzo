@@ -291,7 +291,7 @@
 
                 </div>
 
-                <div>
+                <div class="grid grid-cols-2 gap-3">
                     <Product
                         v-for="product in sellingList"
                         :key="product.id"

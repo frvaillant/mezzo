@@ -31,7 +31,8 @@ class ProductType extends AbstractType
                 'label' => 'Prix unitaire (€)'
             ])
             ->add('withConsigne', CheckboxType::class, [
-                'label' => 'Utilise un verre consigné'
+                'label' => 'Utilise un verre consigné',
+                'required' => false,
             ])
             ->add('saleUnit', TextType::class, [
                 'label' => 'Quantité à déduire du stock'

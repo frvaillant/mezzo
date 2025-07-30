@@ -1,14 +1,15 @@
 <script setup>
+
+/**
+ * Composant principal de Mezzo
+ */
+
 import {ref, onMounted, onBeforeUnmount, nextTick} from "vue";
-import Product from "./Product.vue";
 import Purchase from "./Purchase.vue";
 
-
-const quantity = ref(1);
 const sellingList = ref([]);
 const accountNames = ref([]);
 const returnables = ref(0);
-
 
 onMounted(() => {
     nextTick(() => {
@@ -32,12 +33,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
 
 });
-
-
-const increase = () => {
-    quantity.value += 1
-    console.log(quantity.value)
-}
 
 
 </script>

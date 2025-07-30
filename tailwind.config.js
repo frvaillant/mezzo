@@ -13,7 +13,7 @@ module.exports = {
         'bg-cyan-300',
         'bg-lime-400',
         'bg-yellow-900',
-        'bg-pink-900'
+        'bg-pink-950'
     ],
     theme: {
         extend: {

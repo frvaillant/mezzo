@@ -36,6 +36,8 @@ html {
                 flex-direction: column;
                 justify-content: start;
                 align-items: center;
+
+                @apply lg:w-[40vw]
             }
         }
 

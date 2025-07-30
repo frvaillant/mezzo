@@ -1,5 +1,6 @@
 .home-panel {
     transition: 0.5s ease-in-out;
+    @apply lg:w-[40vw];
     &.leave {
         transform: translateX(-100vw);
     }

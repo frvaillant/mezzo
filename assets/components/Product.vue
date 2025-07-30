@@ -103,7 +103,14 @@ const toggleConsigne = (e) => {
 
 <template>
 
-    <div class="product pb-3" :data-quantity="quantity" :class="['bg-' + props.product.color]">
+    <div
+        class="product"
+        :data-quantity="quantity"
+        :class="[
+            'bg-' + props.product.color,
+            props.product.withConsigne ? 'pb-3' : 'pb-6'
+          ]"
+    >
 
         <div class="head flex items-center gap-3 px-2 bg-black/30 text-white rounded-t-md">
             <span class="product-icon" v-html="props.product.picto"></span>

@@ -105,12 +105,12 @@ const toggleConsigne = (e) => {
 
     <div class="product pb-3" :data-quantity="quantity" :class="['bg-' + props.product.color]">
 
-        <div class="head flex items-center gap-3 ps-5 bg-black/30 text-white rounded-t-md">
+        <div class="head flex items-center gap-3 px-2 bg-black/30 text-white rounded-t-md">
             <span class="product-icon" v-html="props.product.picto"></span>
             <span class="product-name text-lg font-bold flex items-center">{{ props.product.name }}</span>
         </div>
 
-        <div class="actions flex justify-between w-full px-5 mt-3">
+        <div class="actions flex justify-between w-full px-2 mt-3">
 
             <button
                 class="increase bg-black/90 p-2 rounded-md"
@@ -122,7 +122,7 @@ const toggleConsigne = (e) => {
                 </svg>
             </button>
 
-            <div class="bg-white text-lg text-gray-500 font-bold flex justify-center items-center px-5 rounded-md">
+            <div class="bg-white text-lg text-gray-500 font-bold flex justify-center items-center w-[45px] rounded-md">
                 {{ quantity }}
             </div>
 
@@ -137,7 +137,7 @@ const toggleConsigne = (e) => {
 
         </div>
 
-        <div v-if="props.product.withConsigne" class="flex items-center justify-between w-full mt-2 px-5">
+        <div v-if="props.product.withConsigne" class="flex items-center justify-between w-full mt-2 px-2">
 
             <div class="flex items-center">
 

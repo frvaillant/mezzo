@@ -12,6 +12,7 @@ use App\Repository\PurchaseRepository;
 use App\Repository\ReturnableGlassReturnRepository;
 use App\Service\DateAmountService;
 use App\Service\ReturnableService;
+use App\Service\StockManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,21 +38,28 @@ class PurchaseController extends AbstractController
         Request $request,
         ProductRepository $productRepository,
         EntityManagerInterface $manager,
+        StockManager $stockManager,
         string $account = null
     )
     {
         $data = json_decode($request->getContent(), true);
+
         if(!empty($data)) {
 
             try {
+
                 $purchase = new Purchase();
                 $purchase->setPaymentMode($data['mode']);
                 $purchase->setAccount($account);
                 $manager->persist($purchase);
 
                 foreach ($data['purchase'] as $productId => $cart) {
+
                     $cart = new PurchaseProductDto($cart);
+
                     $product = $productRepository->find($productId);
+
+                    $stockManager->decreaseStock($product, $cart->quantity);
 
                     if ($product) {
                         $line = new PurchaseLine();
@@ -64,7 +72,9 @@ class PurchaseController extends AbstractController
                             ->setConsigne($consigneAmount);
                         $manager->persist($line);
                         $purchase->addLine($line);
+
                     }
+
                 }
 
                 $manager->flush();
@@ -77,6 +87,7 @@ class PurchaseController extends AbstractController
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
+
     }
 
 

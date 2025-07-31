@@ -18,9 +18,6 @@ class Stock
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
-    #[ORM\Column(enumType: StockUnits::class)]
-    private ?StockUnits $unit = null;
-
     #[ORM\Column]
     private ?float $quantity = null;
 
@@ -37,18 +34,6 @@ class Stock
     public function setProduct(Product $product): static
     {
         $this->product = $product;
-
-        return $this;
-    }
-
-    public function getUnit(): ?StockUnits
-    {
-        return $this->unit;
-    }
-
-    public function setUnit(StockUnits $unit): static
-    {
-        $this->unit = $unit;
 
         return $this;
     }

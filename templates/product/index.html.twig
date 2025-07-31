@@ -11,31 +11,57 @@
 
         <h1 class="text-2xl font-semibold mb-6 text-gray-800 w-full text-start">Liste des produits</h1>
 
-        <div class="overflow-x-auto w-full flex flex-col gap-4">
+        <div class="w-full flex flex-col gap-4">
 
             {% for product in products %}
+                <div data-controller="stock" class="relative">
 
-                <div class="flex justify-between w-[98%]">
-                    <div
-                        class="product-name pe-5 flex items-center text-md font-bold flex-1 rounded-lg relative {{ 'bg-' ~ product.color }}"
-                    >
-                        <span class="product-picto svg-white">
-                            {{ product.picto | sanitize_html }}
-                        </span>
-                        <span class="ms-3 flex-1 text-start items-center h-full flex justify-between pe-2 whitespace-nowrap">
-                            {{ product.name }}
-                        </span>
-                        <div>
-                            <a href="{{ path('app_product_edit', {id: product.id}) }}" class=" bg-black text-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffffff" viewBox="0 0 256 256"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H216a8,8,0,0,0,0-16H115.32l112-112A16,16,0,0,0,227.32,73.37ZM136,75.31,152.69,92,68,176.69,51.31,160ZM48,208V179.31L76.69,208Zm48-3.31L79.32,188,164,103.31,180.69,120Zm96-96L147.32,64l24-24L216,84.69Z"></path></svg>
-                            </a>
+                    <div class="flex justify-between w-[98%]">
+
+                        <div
+                            class="product-name pe-5 flex items-center text-md font-bold flex-1 rounded-lg relative {{ 'bg-' ~ product.color }}"
+                        >
+                            <span class="product-picto svg-white">
+                                {{ product.picto | sanitize_html }}
+                            </span>
+                            <span class="ms-3 flex-1 text-start items-center h-full flex justify-between pe-2 whitespace-nowrap">
+                                {{ product.name }}
+                            </span>
+                            <div>
+                                <a href="{{ path('app_product_edit', {id: product.id}) }}" class=" bg-black text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffffff" viewBox="0 0 256 256"><path d="M227.32,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H216a8,8,0,0,0,0-16H115.32l112-112A16,16,0,0,0,227.32,73.37ZM136,75.31,152.69,92,68,176.69,51.31,160ZM48,208V179.31L76.69,208Zm48-3.31L79.32,188,164,103.31,180.69,120Zm96-96L147.32,64l24-24L216,84.69Z"></path></svg>
+                                </a>
+                            </div>
+                            <div class="ms-2">
+                                <a href="#" class=" bg-black text-white" data-action="click->stock#showForm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffffff" viewBox="0 0 256 256"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"></path></svg>
+                                </a>
+                            </div>
+
                         </div>
 
                     </div>
 
+                    <div data-stock-target="form" class="bg-white p-4 rounded-md shadow-dark hidden absolute top-0 left-0 w-full z-10">
+                        <a href="#" data-action="click->stock#hideForm" class="absolute top-2 right-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#999999" viewBox="0 0 256 256"><path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path></svg>
+                        </a>
+
+                        <h3 class="ms-4 font-bold text-lg">
+                            Stock de {{ product.name }}
+                        </h3>
+
+
+                        {{ form_start(forms[product.id]) }}
+                        {{ form_row(forms[product.id].quantity) }}
+                        <button class="{{ 'bg-' ~ product.color }} text-white ms-4 px-4 py-2 rounded-md">
+                            Enregistrer
+                        </button>
+                        {{ form_end(forms[product.id]) }}
+
+                    </div>
 
                 </div>
-
             {% endfor %}
         </div>
 

@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Stock;
 use App\Form\ProductType;
+use App\Form\StockType;
 use App\Repository\ProductRepository;
+use App\Repository\StockRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
@@ -15,12 +18,50 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/product')]
 final class ProductController extends AbstractController
 {
-    #[Route(name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository, HtmlSanitizerInterface $sanitizer): Response
-    {
+    #[Route(name: 'app_product_index', methods: ['GET', 'POST'])]
+    public function index(
+        ProductRepository $productRepository,
+        Request $request
+    ): Response {
+        $products = $productRepository->findAll();
+
+        $forms = [];
+
+        foreach ($products as $product) {
+            $productStock = $product->getStock();
+
+            if(!$productStock) {
+                $productStock = new Stock();
+                $productStock->setProduct($product);
+            }
+
+            $form = $this->createForm(StockType::class, $productStock, [
+                'action' => $this->generateUrl('save_stock', ['stock' => $productStock->getId()])
+            ]);
+
+            $form->handleRequest($request);
+
+            $forms[$product->getId()] = $form->createView();
+
+        }
+
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $products,
+            'forms' => $forms
         ]);
+    }
+
+
+    #[Route('/savestock/{stock}', name: 'save_stock', methods: ['POST'])]
+    public function saveStock(Stock $stock, Request $request, EntityManagerInterface $manager)
+    {
+        $form = $this->createForm(StockType::class, $stock);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $manager->flush();
+        }
+
+        return $this->redirectToRoute('app_product_index');
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]

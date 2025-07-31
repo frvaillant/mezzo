@@ -2,37 +2,37 @@
 
 <div class="bg-blue-300 flex justify-between items-center rounded-lg text-xl mb-4 mt-4">
 
-            <span class=" p-3 font-bold">
-                Total du jour
-            </span>
+    <span class=" p-3 font-bold">
+        Total du jour
+    </span>
 
     <span class="font-bold bg-black p-3 text-white rounded-e-lg w-[100px] text-center">
-                {{ day_total }} €
-            </span>
+        {{ day_total }} €
+    </span>
 
 </div>
 
 <div class="bg-blue-300 flex justify-between items-center rounded-lg text-xl mb-4">
 
-            <span class=" p-3 font-bold">
-                Retour consignes
-            </span>
+    <span class=" p-3 font-bold">
+        Retour consignes
+    </span>
 
     <span class="font-bold bg-black p-3 text-white rounded-e-lg w-[100px] text-center">
-                - {{ returns }} €
-            </span>
+        - {{ returns }} €
+    </span>
 
 </div>
 
 <div class="bg-cyan-800 flex justify-between items-center rounded-lg text-xl mb-4">
 
-            <span class=" p-3 font-bold text-white">
-                Total
-            </span>
+    <span class=" p-3 font-bold text-white">
+        Total
+    </span>
 
     <span class="font-bold bg-black p-3 text-white rounded-e-lg w-[100px] text-center">
-                {{ day_total - returns }} €
-            </span>
+        {{ day_total - returns }} €
+    </span>
 
 </div>
 
@@ -40,7 +40,17 @@
 <div class="payment-modes mt-4">
 
     <table>
+
+        <tr class="bg-cyan-500">
+
+            <td colspan="3" class="ps-2 font-bold text-white">
+                Moyens de paiment
+            </td>
+
+        </tr>
+
         {% for detail in payment_modes %}
+
             <tr>
 
                 <td class="font-bold ps-2" colspan="2">
@@ -56,14 +66,70 @@
                 </td>
 
             </tr>
+
         {% endfor %}
+        {% set total = 0 %}
+
+        {% if products_quantities | length > 0 %}
+
+                <tr class="bg-cyan-500 rounded-md">
+
+                    <td colspan="" class="ps-2 font-bold text-white">
+                        Quantités vendues
+                    </td>
+
+                    <td class="text-center font-bold">
+                        Qté.
+                    </td>
+
+                    <td class="text-end font-bold">
+                        Total
+                    </td>
+
+                </tr>
+
+            {% for detail in products_quantities %}
+
+                <tr>
+
+                    <td class="font-bold ps-2" colspan="">
+                        {{ detail.name }}
+                    </td>
+
+                    <td class="w-[100px] text-center">
+                        {{ detail.quantity }}
+                    </td>
+
+                    <td class="text-end">
+                        {% set subtotal = detail.quantity * detail.unitPrice %}
+                        {% set total = total + subtotal %}
+                        {{ subtotal }} €
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            <tr>
+
+                <td colspan="2"></td>
+
+                <td class="text-end font-bold">
+                    {{ total }} €
+                </td>
+
+            </tr>
+
+        {% endif %}
 
         {% if accounts | length > 0 %}
 
             <tr class="bg-gray-200">
+
                 <th colspan="3" class="text-start ps-2">
                     Détail des comptes
                 </th>
+
             </tr>
 
             {% for account in accounts %}
@@ -110,12 +176,15 @@
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffffff" viewBox="0 0 256 256"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,16V88H32V64Zm0,128H32V104H224v88Zm-16-24a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h32A8,8,0,0,1,208,168Zm-64,0a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h16A8,8,0,0,1,144,168Z"></path></svg>
                         </button>
+
                     </td>
+
                 </tr>
 
             {% endfor %}
 
         {% endif %}
+
     </table>
 
 </div>

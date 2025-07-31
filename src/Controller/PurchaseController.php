@@ -123,9 +123,20 @@ class PurchaseController extends AbstractController
 
         $accounts = $purchaseLineRepository->getDailyTotalByAccount($date);
 
-        $returns  = $dateAmountService->getReturnsCount($date);
+        $returnables = $purchaseLineRepository->getDailyReturnables($date);
+        $returns = $dateAmountService->getReturnsCount($date);
+
+        $unReturned = $returnables - $returns;
 
         $paymentModesTotal = $purchaseLineRepository->todayTotalByPaymentMode($date);
+
+        $quantityByProduct = $purchaseLineRepository->todayTotalSoldByProduct($date);
+
+        $quantityByProduct[] = [
+            'quantity' => $unReturned,
+            'name' => 'Consignes non rendues',
+            'unitPrice' => 1
+        ];
 
         return $this->render('purchase/list.html.twig', [
             'date' => $date,
@@ -133,7 +144,8 @@ class PurchaseController extends AbstractController
             'list' => $list,
             'accounts' => $accounts,
             'returns' => $returns,
-            'payment_modes' => $paymentModesTotal
+            'payment_modes' => $paymentModesTotal,
+            'products_quantities' => $quantityByProduct
         ]);
 
     }

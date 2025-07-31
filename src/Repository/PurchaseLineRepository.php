@@ -75,6 +75,26 @@ class PurchaseLineRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function todayTotalSoldByProduct(?\DateTime $date = null): array
+    {
+        $today = $date ?? new \DateTime();
+        $start = (clone $today)->setTime(0, 0, 0);
+        $end = (clone $today)->setTime(23, 59, 59);
+
+        return $this->createQueryBuilder('pl')
+            ->join('pl.purchase', 'p')
+            ->join('pl.product', 'pro')
+            ->where('p.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->select('COALESCE(SUM(pl.quantity), 0) AS quantity')
+            ->addSelect('pro.name')
+            ->addSelect('pro.unitPrice')
+            ->groupBy('pl.product')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function getDailyTotalByAccount(\DateTimeInterface $date): array
     {
         $start = (clone $date)->setTime(0, 0, 0);
@@ -91,6 +111,23 @@ class PurchaseLineRepository extends ServiceEntityRepository
             ->groupBy('name')
             ->getQuery()
             ->getResult();
+    }
+
+
+    public function getDailyReturnables(\DateTimeInterface $date): float
+    {
+        $start = (clone $date)->setTime(0, 0, 0);
+        $end = (clone $date)->setTime(23, 59, 59);
+
+        return $this->createQueryBuilder('pl')
+            ->select('COALESCE(SUM(pl.consigne), 0) AS total')
+            ->join('pl.purchase', 'p')
+            ->where('p.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+//            ->groupBy('p.createdAt')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
 

@@ -4,7 +4,8 @@
  * Représente un produit et les actions liées
  */
 
-import {ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
+import Notifier from "../services/Notifier"
 
 const props = defineProps({
     product: {
@@ -23,6 +24,10 @@ const consigneButton = ref(null)
 
 const emit = defineEmits(['update-total'])
 
+onMounted(() => {
+    document.addEventListener('Purchase', onPurchase)
+})
+
 watch(total, (newTotal) => {
     emit('update-total', {
         id: props.product.id,
@@ -33,6 +38,19 @@ watch(total, (newTotal) => {
     })
 })
 
+const onPurchase = (e) => {
+    const alertStock = e?.detail?.stock[props.product.id]
+    const message = `Votre stock de ${props.product.name} est faible`
+
+    if(alertStock) {
+        Notifier.warning(message)
+    }
+}
+
+/**
+ *
+ * @type {handleClickAdd}
+ */
 const handleClickAdd = (element => {
     element.classList.add('clicked')
     void element.offsetWidth;
@@ -56,6 +74,9 @@ const increase = (e) => {
     calculate()
 }
 
+/**
+ *
+ */
 const decrease = () => {
     if (quantity.value === 0) {
         return
@@ -70,7 +91,6 @@ const decrease = () => {
  */
 const reset = () => {
     quantity.value = 0
-    // hasConsigne.value = false
     consigneButton?.value?.classList.remove('active')
     consigneButton?.value?.classList.remove('bg-' + consigneButton?.value?.dataset.color)
     calculate()

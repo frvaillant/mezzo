@@ -21,6 +21,9 @@ class StockType extends AbstractType
             ->add('quantity', NumberType::class, [
                 'label' => 'Quantité en stock'
             ])
+            ->add('alertThreshold', NumberType::class, [
+                'label' => 'Seuil d\'alerte'
+            ])
         ;
     }
 

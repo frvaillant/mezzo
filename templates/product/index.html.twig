@@ -54,6 +54,7 @@
 
                         {{ form_start(forms[product.id]) }}
                         {{ form_row(forms[product.id].quantity) }}
+                        {{ form_row(forms[product.id].alertThreshold) }}
                         <button class="{{ 'bg-' ~ product.color }} text-white ms-4 px-4 py-2 rounded-md">
                             Enregistrer
                         </button>

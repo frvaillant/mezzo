@@ -21,6 +21,9 @@ class Stock
     #[ORM\Column]
     private ?float $quantity = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $alertThreshold = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,6 +49,18 @@ class Stock
     public function setQuantity(float $quantity): static
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getAlertThreshold(): ?float
+    {
+        return $this->alertThreshold;
+    }
+
+    public function setAlertThreshold(?float $alertThreshold): static
+    {
+        $this->alertThreshold = $alertThreshold;
 
         return $this;
     }

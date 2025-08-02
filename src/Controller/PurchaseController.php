@@ -10,6 +10,7 @@ use App\Repository\ProductRepository;
 use App\Repository\PurchaseLineRepository;
 use App\Repository\PurchaseRepository;
 use App\Repository\ReturnableGlassReturnRepository;
+use App\Repository\StockRepository;
 use App\Service\DateAmountService;
 use App\Service\ReturnableService;
 use App\Service\StockManager;
@@ -39,6 +40,7 @@ class PurchaseController extends AbstractController
         ProductRepository $productRepository,
         EntityManagerInterface $manager,
         StockManager $stockManager,
+        StockRepository $stockRepository,
         string $account = null
     )
     {
@@ -79,7 +81,7 @@ class PurchaseController extends AbstractController
 
                 $manager->flush();
 
-                return new JsonResponse([], Response::HTTP_OK);
+                return new JsonResponse(['stock' => $stockRepository->getStocksAlert()], Response::HTTP_OK);
 
             } catch (\Exception $e) {
                 return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);

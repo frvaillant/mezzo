@@ -16,6 +16,26 @@ class StockRepository extends ServiceEntityRepository
         parent::__construct($registry, Stock::class);
     }
 
+
+    public function getStocksAlert()
+    {
+        $results = $this->createQueryBuilder('s')
+            ->join('s.product', 'p')
+            ->select('p.id')
+            ->addSelect('s.quantity')
+            ->addSelect('s.alertThreshold')
+            ->getQuery()
+            ->getResult()
+            ;
+
+        $data = [];
+        foreach ($results as $row) {
+            $data[$row['id']] = $row['quantity'] > 0 && $row['quantity'] <= $row['alertThreshold'];
+        }
+
+        return $data;
+    }
+
 //        /**
 //         * @return Stock[] Returns an array of Stock objects
 //         */

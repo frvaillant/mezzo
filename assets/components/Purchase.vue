@@ -140,8 +140,6 @@ const purchase = async (mode, account = null, event) => {
          */
         canPurchase.value = false
 
-        const purchaseEvent = new CustomEvent('Purchase')
-
         const data = {
             purchase: buyingList.value,
             mode: mode
@@ -165,8 +163,6 @@ const purchase = async (mode, account = null, event) => {
             await updateAccountNames()
             await updateReturnables()
 
-            document.dispatchEvent(purchaseEvent)
-
             canPurchase.value = true
 
             if (account) {
@@ -176,6 +172,10 @@ const purchase = async (mode, account = null, event) => {
 
             scrollWindowToTop()
 
+            const purchaseEvent = new CustomEvent('Purchase', {
+                detail: await response.json()
+            })
+            document.dispatchEvent(purchaseEvent)
             return
         }
 

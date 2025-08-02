@@ -21,6 +21,7 @@ final class ProductController extends AbstractController
     #[Route(name: 'app_product_index', methods: ['GET', 'POST'])]
     public function index(
         ProductRepository $productRepository,
+        EntityManagerInterface $manager,
         Request $request
     ): Response {
         $products = $productRepository->findAll();
@@ -32,7 +33,9 @@ final class ProductController extends AbstractController
 
             if(!$productStock) {
                 $productStock = new Stock();
-                $productStock->setProduct($product);
+                $productStock->setProduct($product)->setQuantity(0);
+                $manager->persist($productStock);
+                $manager->flush();
             }
 
             $form = $this->createForm(StockType::class, $productStock, [
@@ -53,7 +56,7 @@ final class ProductController extends AbstractController
 
 
     #[Route('/savestock/{stock}', name: 'save_stock', methods: ['POST'])]
-    public function saveStock(Stock $stock, Request $request, EntityManagerInterface $manager)
+    public function saveStock( Stock $stock, Request $request, EntityManagerInterface $manager)
     {
         $form = $this->createForm(StockType::class, $stock);
         $form->handleRequest($request);

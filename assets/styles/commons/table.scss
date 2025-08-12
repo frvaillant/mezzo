@@ -24,8 +24,10 @@ table {
     }
     tbody {
         tr {
-            td {
-                border-bottom: 1px solid #ccc;
+            &:not(:last-child) {
+                td {
+                    border-bottom: 1px solid #ccc;
+                }
             }
         }
     }

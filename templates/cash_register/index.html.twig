@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CashRegisterController!{% endblock %}
+
+{% block body %}
+
+<div
+    class="home-panel gap-10 bg-gray-200 p-2 h-[96vh] w-[92vw] ms-[4vw] mt-[2vh] rounded-xl flex flex-col justify-start items-center"
+    data-controller="leave"
+>
+
+    {% include '_nav.html.twig' %}
+
+    <h1 class="text-2xl font-semibold mb-6 text-gray-800 w-full text-start">Détail de votre saison {{ year }}</h1>
+
+    <div class="w-full flex flex-col gap-4">
+        <table>
+            <tr class="bg-cyan-500">
+                <td class="font-bold bg-cyan-500 ps-2">
+                    Total de la saison
+                </td>
+                <td class="text-end font-bold bg-cyan-500 pe-2">
+                    {{ season_total }} €
+                </td>
+            </tr>
+            {% for day in season_detail %}
+                <tr>
+                    <td class="ps-2">
+                        {{ day.date }}
+                    </td>
+                    <td class="text-end pe-2">
+                        {{ day.total }} €
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td class="text-end font-bold pe-2 text-black">
+                    {{ season_total }} €
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

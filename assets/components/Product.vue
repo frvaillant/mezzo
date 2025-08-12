@@ -4,7 +4,7 @@
  * Représente un produit et les actions liées
  */
 
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue"
 import Notifier from "../services/Notifier"
 
 const props = defineProps({
@@ -15,7 +15,7 @@ const props = defineProps({
 })
 
 /** Total du prix correspondant au produit */
-const total = ref(0);
+const total = ref(0)
 
 const quantity = ref(props.product.quantity ?? 0)
 
@@ -53,7 +53,7 @@ const onPurchase = (e) => {
  */
 const handleClickAdd = (element => {
     element.classList.add('clicked')
-    void element.offsetWidth;
+    void element.offsetWidth
     element.style.transition = '0.25s ease'
     const delay = 250
     setTimeout(() => {

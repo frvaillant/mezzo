@@ -131,6 +131,57 @@ class PurchaseLineRepository extends ServiceEntityRepository
     }
 
 
+    public function getTotalSoldByDay(int $year): array
+    {
+        $start = new \DateTime("$year-01-01");
+        $end = new \DateTime("$year-12-31");
+
+        $results = $this->createQueryBuilder('pl')
+            ->join('pl.purchase', 'p')
+            ->select('DATE(p.createdAt) AS date')
+            ->addSelect('COALESCE(SUM(pl.total), 0) AS total')
+            ->where('p.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->groupBy('date')
+            ->orderBy('date', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $formatter = new \IntlDateFormatter(
+            'fr_FR',
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE
+        );
+
+        foreach ($results as &$row) {
+            $dateObj = \DateTime::createFromFormat('Y-m-d', $row['date']);
+            $row['date'] = ucfirst($formatter->format($dateObj));
+        }
+
+        return $results;
+    }
+
+
+    public function getTotalSoldBySeason(int $year): int
+    {
+        $start = new \DateTime("$year-01-01");
+        $end = new \DateTime("$year-12-31");
+
+        return $this->createQueryBuilder('pl')
+            ->join('pl.purchase', 'p')
+            ->select('COALESCE(SUM(pl.total), 0) AS total')
+            ->where('p.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+    }
+
+
     //    public function findOneBySomeField($value): ?PurchaseLine
     //    {
     //        return $this->createQueryBuilder('p')
